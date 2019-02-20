@@ -1,5 +1,4 @@
 import pprint
-import os
 from bs4 import BeautifulSoup
 
 ####################################################################################################
@@ -15,9 +14,8 @@ def txt_to_string (filename):
     try:        
         with open(filename, "r") as myfile:
             for line in myfile:
-               output_string = output_string + line    
-    #pprint.pprint(output_string)
-            print("\n{0} was successfully opened.\n".format(filename))
+                output_string = output_string + line    
+                print("\n{0} was successfully opened.\n".format(filename))
         return output_string
       
     except:
@@ -33,21 +31,23 @@ def file_to_string (filename):
     """
     output_string = ""
     
-#    try:
-    print("\n{0} was successfully opened.\n".format(filename))
-        
-    with open(filename, "r") as myfile:
-        for line in myfile:
-            line = line.rstrip()
-#            line = line.encode("unicode-escape").decode("latin-1")
-            print(line)
-            output_string = output_string + line    
-    #pprint.pprint(output_string)
-    
-    return output_string
-      
-#    except:
-#        print("\nFailed to open {0}.\n".format(filename))
+    try:
+        print("\n{0} was successfully opened.\n".format(filename))    
+        with open(filename, "r", errors="replace") as myfile:
+            print("\nSuccessfully opened {0}.\n".format(filename))
+            for line in myfile:
+                try:
+                    line = line.rstrip()
+                    line = line.encode('latin-1').decode('unicode-escape').encode('latin-1').decode('utf-8')
+                    output_string = output_string + line
+                except:
+                    #print("Failed line", line)
+                    pass
+
+        return output_string  
+
+    except:
+        print("\nFailed to open {0}.\n".format(filename))
 
 ####################################################################################################
 
@@ -64,12 +64,12 @@ def extract_tags_classes(html_filename, tag, class_ = ""):
     
     if class_ != "":
         wanted_tags = soup.find_all(tag, class_)   
-        print('{1} <{2}> tags with the class "{3}" were retrieved in the file {0}.'.format(
+        print('{1} <{2}> tags with the class "{3}" were retrieved in the file {0}.\n'.format(
             html_filename, len(wanted_tags), tag, class_))
 
     elif class_ == "":
         wanted_tags = soup.find_all(tag)   
-        print('{1} <{2}> tags were retrieved in the file {0}.'.format(
+        print('{1} <{2}> tags were retrieved in the file {0}.\n'.format(
             html_filename, len(wanted_tags), tag))
 
     return wanted_tags
@@ -82,10 +82,3 @@ def extract_tags_classes(html_filename, tag, class_ = ""):
 #file = "alice.html"
 #test = extract_tags_classes(file,"p")
 #pprint.pprint(test)
-
-## Test with actual file
-file = "file1.html"
-
-#test = extract_tags_classes("file1.html", "a")
-pprint.pprint(file_to_string("file1.html"))
-
