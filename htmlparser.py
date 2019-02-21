@@ -32,9 +32,8 @@ def file_to_string (filename):
     output_string = ""
     
     try:
-        print("\n{0} was successfully opened.\n".format(filename))    
         with open(filename, "r", errors="replace") as myfile:
-            print("\nSuccessfully opened {0}.\n".format(filename))
+            print("Successfully opened {0}.\n".format(filename))
             for line in myfile:
                 try:
                     line = line.rstrip()
