@@ -29,7 +29,8 @@ and attibutes within a particular tag and class (optional).\n
     class_            = None
     tag_searchtype    = ""
     class__searchtype = ""
-        
+
+    # Select how search text will be sourced
     while sourcetype not in ("y", "Y", "n", "N"):
         sourcetype = input("Will files be read from a folder? Y/N\n")
 
@@ -49,7 +50,8 @@ and attibutes within a particular tag and class (optional).\n
                 else:
                     print ("Incorrect input. Please start over...")
                     return output_dict
-                
+
+    # Select how tags will be searched
     while tag_searchtype not in ("1", "2", "3", "4"):
         print("\nHow will tags be searched?")
         print("1. Single tag search.")
@@ -68,6 +70,7 @@ and attibutes within a particular tag and class (optional).\n
             tag = ""
     output_dict["tag"] = tag
 
+    # Select how classes will be searched
     while class__searchtype not in ("1", "2", "3", "4"):
         print("\nHow will classes be searched?")
         print("1. Single class search.")
@@ -97,13 +100,13 @@ def process_files_in_folder (mode):
     Output: 
     """
         
-    
+    # Find file(s)
     files = os.listdir()
+
+    # Get a list with just html file names
     htmlfiles  = []
-    
     for file in files: 
         if ".html" in file: htmlfiles.append(file)
-    
     if len (htmlfiles) == 0:
         print("No html files found.")
     else:
