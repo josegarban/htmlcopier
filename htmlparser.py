@@ -50,42 +50,6 @@ def file_to_string (filename):
 
 ####################################################################################################
 
-def extract_tags_classes(html_filename, tag, class_):
-    """
-    Inputs: filename of an html file, tag we want to retrieve, class (optional) we want to retrieve.
-    Objective: an html file is opened, converted to a string, the string is converted to a soup,
-                and a list of tags belonging to the sought tag AND class is returned.
-    Output: list with extracted tags.
-    """
-
-    html_string = file_to_string(html_filename)
-    soup = BeautifulSoup(html_string, "html.parser")
-    
-    if class_ != "" and tag != "":
-        output_snippets = soup.find_all(tag, class_)   
-        print('{0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
-            len(output_snippets), tag, class_, html_filename))
-
-    elif class_ == "" and tag != "":
-        output_snippets = soup.find_all(tag)   
-        print('{0} <{1}> tags were retrieved in the file {2}.\n'.format(
-            len(output_snippets), tag, html_filename))
-
-    elif class_ != "" and tag == "":
-        output_snippets = soup.find_all(class_)   
-        print('{0} tags with the class "{1}" were retrieved in the file {2}.\n'.format(
-            len(output_snippets), class_, html_filename))
-
-    elif class_ == "" and tag == "":
-        output_snippets = soup.find_all()   
-        print('{0} tags of all types and classes were retrieved in the file {1}.\n'.format(
-            len(output_snippets), html_filename))
-
-    return output_snippets
-
-
-####################################################################################################
-
 def get_class_names (html_filename):
     """
     Inputs: filename of an html file.
@@ -122,4 +86,45 @@ def get_tag_names (html_filename):
         output_set.add(tag.name) 
     
     return output_set
+
+####################################################################################################
+
+def extract_tags_classes(html_filename, tag, class_):
+    """
+    Inputs: filename of an html file, tag we want to retrieve, class we want to retrieve.
+    Objective: an html file is opened, converted to a string, the string is converted to a soup,
+                and a list of tags belonging to the sought tag AND class is returned.
+    Output: list with extracted tags.
+    """
+
+    html_string = file_to_string(html_filename)
+    soup = BeautifulSoup(html_string, "html.parser")
+    
+    if class_ != "" and tag != "":
+        output_snippets = soup.find_all(tag, class_)
+        print('{0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
+            len(output_snippets), tag, class_, html_filename))
+
+    elif class_ == "" and tag != "":
+        output_snippets = soup.find_all(tag)   
+        print('{0} <{1}> tags were retrieved in the file {2}.\n'.format(
+            len(output_snippets), tag, html_filename))
+
+    elif class_ != "" and tag == "":
+        output_snippets = []
+        for tag in soup.find_all():
+            if tag.get("class") is not None:
+                if class_ in tag.get("class"):
+                    output_snippets.append(tag)   
+        print('{0} tags with the class "{1}" were retrieved in the file {2}.\n'.format(
+            len(output_snippets), class_, html_filename))
+
+    elif class_ == "" and tag == "":
+        output_snippets = soup.find_all()   
+        print('{0} tags of all types and classes were retrieved in the file {1}.\n'.format(
+            len(output_snippets), html_filename))
+
+    return output_snippets
+
+
 
