@@ -24,9 +24,11 @@ and attibutes within a particular tag and class (optional).\n
     output_dict ["class_"]            = ""
     output_dict ["class__searchtype"] = ""
     
-    sourcetype = None
-    tag        = None
-    class_     = None
+    sourcetype        = None
+    tag               = None
+    class_            = None
+    tag_searchtype    = ""
+    class__searchtype = ""
         
     while sourcetype not in ("y", "Y", "n", "N"):
         sourcetype = input("Will files be read from a folder? Y/N\n")
@@ -48,41 +50,41 @@ and attibutes within a particular tag and class (optional).\n
                     print ("Incorrect input. Please start over...")
                     return output_dict
                 
-    while tag_searchtype not in (1, 2, 3, 4):
-        print("How will tags be searched?")
+    while tag_searchtype not in ("1", "2", "3", "4"):
+        print("\nHow will tags be searched?")
         print("1. Single tag search.")
         print("2. Approximate tag search.")
         print("3. Search across all tags.")
         print("4. Load search terms from a list.")        
-        tag_searchtype = input("Type 1 to 4. ")
-        output_dict["tag_searchtype"] = tag_searchtype
+        tag_searchtype = input("Type your choice. ")
+    output_dict["tag_searchtype"] = tag_searchtype
 
-    while tag is None and tag_searchtype in (1, 2, 3, 4):
-        if tag_searchtype == 1: tag_ = input("What tag will be searched?\n")
-        if tag_searchtype == 2: tag_ = input("What string should appear in the tag name(s)?\n")
-        if tag_searchtype == 3: tag_ = ""
-        if tag_searchtype == 4:
+    while tag is None and tag_searchtype in ("1", "2", "3", "4"):
+        if tag_searchtype == "1": tag = input("\nWhat tag will be searched?\n")
+        if tag_searchtype == "2": tag = input("\nWhat string should appear in the tag name(s)?\n")
+        if tag_searchtype == "3": tag = ""
+        if tag_searchtype == "4":
             print("Loading files is not yet available...")
             tag = ""
-        output_dict["class_"] = tag
+    output_dict["tag"] = tag
 
-    while class__searchtype not in (1, 2, 3, 4):
-        print("How will classes be searched?")
+    while class__searchtype not in ("1", "2", "3", "4"):
+        print("\nHow will classes be searched?")
         print("1. Single class search.")
         print("2. Approximate class search.")
         print("3. Search across all classes.")
         print("4. Load search terms from a list.")        
-        class__searchtype = input("Type 1 to 4. ")
-        output_dict["class__searchtype"] = class__searchtype
+        class__searchtype = input("Type your choice. ")
+    output_dict["class__searchtype"] = class__searchtype
 
-    while class_ is None and class_searchtype in (1, 2, 3, 4):
-        if class__searchtype == 1: class_ = input("What class will be searched?\n")
-        if class__searchtype == 2: class_ = input("What string should appear in the class name(s)?\n")
-        if class__searchtype == 3: class_ = ""
-        if class__searchtype == 4:
+    while class_ is None and class__searchtype in ("1", "2", "3", "4"):
+        if class__searchtype == "1": class_ = input("\nWhat class will be searched?\n")
+        if class__searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
+        if class__searchtype == "3": class_ = ""
+        if class__searchtype == "4":
             print("Loading files is not yet available...")
             class_ = ""
-        output_dict["class_"] = class_
+    output_dict["class_"] = class_
         
     return output_dict
 
