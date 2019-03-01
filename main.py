@@ -9,33 +9,28 @@ import pprint
 
 def choose_mode ():
     """
-    Input: None.
+    Input: User input.
     Objective: Let the user choose which mode is to be used.
-    Output:
+    Output: Dictionary containing the search parameters.
     """
-    print("""
-This script will analyze one or more .html files and extract the text
-and attibutes within a particular tag and class (optional).\n
-    """)
-    output_dict = {}
-    output_dict ["sourcetype"]        = ""
-    output_dict ["tag"]               = ""
-    output_dict ["tag_searchtype"]    = ""
-    output_dict ["class_"]            = ""
-    output_dict ["class__searchtype"] = ""
-    
-    sourcetype        = None
-    tag               = None
-    class_            = None
-    tag_searchtype    = ""
-    class__searchtype = ""
+
+    output_dict = {}    
+    sourcetype = None
+    tag        = None
+    class_     = None
+    searchtype = None
 
     # Select how search text will be sourced
     while sourcetype not in ("y", "Y", "n", "N"):
         sourcetype = input("Will files be read from a folder? Y/N\n")
 
-        if sourcetype in ("y", "Y") :
-            output_dict["sourcetype"] = "folder"
+        if sourcetype in ("y", "Y"):
+            sourcetype = input("Will a single file be read? Y/N\n")
+            if sourcetype in ("y", "Y"):
+                print("You will be asked for the file name later.")
+                output_dict["sourcetype"] = "file"
+            else:
+                output_dict["sourcetype"] = "folder"
             continue
         
         elif sourcetype in ("n", "N"):
@@ -52,40 +47,33 @@ and attibutes within a particular tag and class (optional).\n
                     return output_dict
 
     # Select how tags will be searched
-    while tag_searchtype not in ("1", "2", "3", "4"):
-        print("\nHow will tags be searched?")
-        print("1. Single tag search.")
-        print("2. Approximate tag search.")
-        print("3. Search across all tags.")
+    while searchtype not in ("1", "2", "3", "4"):
+        print("\nHow will tags and/or classes be searched?")
+        print("1. Single tag/class search.")
+        print("2. Approximate tag/class search.")
+        print("3. Search across all tags and classes.")
         print("4. Load search terms from a list.")        
-        tag_searchtype = input("Type your choice. ")
-    output_dict["tag_searchtype"] = tag_searchtype
+        searchtype = input("Type your choice. ")
+    if   searchtype == "1": output_dict["searchtype"] = "Single"
+    elif searchtype == "2": output_dict["searchtype"] = "Approximate"
+    elif searchtype == "3": output_dict["searchtype"] = "All"
+    elif searchtype == "4": output_dict["searchtype"] = "List"
 
-    while tag is None and tag_searchtype in ("1", "2", "3", "4"):
-        if tag_searchtype == "1": tag = input("\nWhat tag will be searched?\n")
-        if tag_searchtype == "2": tag = input("\nWhat string should appear in the tag name(s)?\n")
-        if tag_searchtype == "3": tag = ""
-        if tag_searchtype == "4":
-            print("Loading files is not yet available...")
+    while tag is None and searchtype in ("1", "2", "3", "4"):
+        if searchtype == "1": tag = input("\nWhat tag will be searched?\nLeave it blank to search all tags\n")
+        if searchtype == "2": tag = input("\nWhat string should appear in the tag name(s)?\n")
+        if searchtype == "3": tag = ""
+        if searchtype == "4":
+            print("Loading files is not yet available!")
             tag = ""
     output_dict["tag"] = tag
-
-    # Select how classes will be searched
-    while class__searchtype not in ("1", "2", "3", "4"):
-        print("\nHow will classes be searched?")
-        print("1. Single class search.")
-        print("2. Approximate class search.")
-        print("3. Search across all classes.")
-        print("4. Load search terms from a list.")        
-        class__searchtype = input("Type your choice. ")
-    output_dict["class__searchtype"] = class__searchtype
-
-    while class_ is None and class__searchtype in ("1", "2", "3", "4"):
-        if class__searchtype == "1": class_ = input("\nWhat class will be searched?\n")
-        if class__searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
-        if class__searchtype == "3": class_ = ""
-        if class__searchtype == "4":
-            print("Loading files is not yet available...")
+    
+    while class_ is None and searchtype in ("1", "2", "3", "4"):
+        if searchtype == "1": class_ = input("\nWhat class will be searched?\Leave it blank to search all classes\n")
+        if searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
+        if searchtype == "3": class_ = ""
+        if searchtype == "4":
+            print("Loading files is not yet available!")
             class_ = ""
     output_dict["class_"] = class_
         
@@ -93,7 +81,7 @@ and attibutes within a particular tag and class (optional).\n
 
 ####################################################################################################
 
-def process_files_in_folder (mode):
+def process_files_in_folder ():
     """
     Input: dictionary with parameters
     Objective: read the html files
@@ -125,17 +113,43 @@ def main ():
                 in a local folder or in a remote location.                
     Output: an html file consisting of just those tags. No styles will be copied.
     """
-    
+    print("""
+This script will analyze one or more .html files and extract the text
+and attibutes within a particular tag and class (optional).\n
+    """)
+    results = ""
     mode = choose_mode()
     
+    file = ""
+    if mode ["sourcetype"] == "file"   :
+        while file = "":
+            file = input('Insert the file name, with ".html" at the end.\n')
+        htmlfiles = [file]
+
     if mode ["sourcetype"] == "folder" :
-        htmlfiles = process_files_in_folder (mode)
+        htmlfiles = process_files_in_folder()
         
-        for file in htmlfiles:
-            htmlparser.extract_tags_classes(file, mode["tag"], mode["class_"])
+    for file in htmlfiles:
+        if   mode ["searchtype"] == "Single":
+            results = htmlparser.extract_tags_classes_exact(file, mode["tag"], mode["class_"])
     
-    if mode ["sourcetype"] == "website":
-        return None
+        elif mode ["searchtype"] == "Approximate":
+            results = htmlparser.extract_tags_classes_approximate(file, mode["tag"], mode["class_"])
+    
+        elif mode ["searchtype"] == "All":
+            results = htmlparser.extract_tags_classes_exact(file, "", "")
+    
+#    print(type(results))
+#    print(len(results))
+#    print(results)
+    
+#    if mode ["sourcetype"] == "website":
+    
+#    if mode ["sourcetype"] == "database":
+
+    return results
+
+####################################################################################################
     
 main()
     
