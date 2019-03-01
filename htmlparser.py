@@ -50,16 +50,15 @@ def file_to_string (filename):
 
 ####################################################################################################
 
-def get_class_names (html_filename):
+def get_class_names (html_string):
     """
-    Inputs: filename of an html file.
+    Inputs: string representing an html file.
     Objective: an html file is opened, converted to a string, the string is converted to a soup,
                 and a list of class names is returned
     Output: list with extracted class names.
     """
     output_set = set()
 
-    html_string = file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
 
     for tag in soup.find_all():
@@ -70,16 +69,15 @@ def get_class_names (html_filename):
 
 ####################################################################################################
 
-def get_tag_names (html_filename):
+def get_tag_names (html_string):
     """
-    Inputs: filename of an html file.
+    Inputs: string representing an html file.
     Objective: an html file is opened, converted to a string, the string is converted to a soup,
                 and a list of tag names is returned
     Output: list with extracted tag names.
     """
     output_set = set()
 
-    html_string = file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
 
     for tag in soup.find_all():
@@ -145,16 +143,17 @@ def extract_tags_classes_approximate(html_filename, wanted_tag, wanted_class_):
         similar_tags = set()
         for tag in soup.find_all():
             if wanted_tag in tag.name: similar_tags.add(tag.name)
-        print("\nSimilar tags:", similar_tags)
+        print("Similar tags:", similar_tags)
 
     # Get all classes similar to class_
     if wanted_class_ != "":
-        classes = get_class_names(html_filename)
+        classes = get_class_names(html_string)
         similar_classes = set()
         for class_ in classes:
             if wanted_class_ in class_: similar_classes.add(class_)
-        print("\nSimilar classes:", similar_classes, "\n")
+        print("Similar classes:", similar_classes)
 
+    print("")
     # Different cases (whether we search classes, tags, both or all)
     
     if wanted_class_ != "" and wanted_tag != "":
