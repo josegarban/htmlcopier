@@ -16,11 +16,12 @@ def txt_to_string (filename):
             for line in myfile:
                 output_string = output_string + line    
                 print("\n{0} was successfully opened.\n".format(filename))
-        return output_string
-      
+        return output_string  
+    
     except:
         print("\nFailed to open {0}.\n".format(filename))
-
+        return ""
+    
 ####################################################################################################
 
 def file_to_string (filename):
@@ -43,10 +44,11 @@ def file_to_string (filename):
                     #print("Failed line", line)
                     pass
 
-        return output_string  
-
     except:
         print("\nFailed to open {0}.\n".format(filename))
+        
+    finally:
+        return output_string  
 
 ####################################################################################################
 

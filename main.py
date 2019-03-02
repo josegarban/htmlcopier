@@ -5,6 +5,7 @@ be it saved files or records from a database
 
 import htmlparser
 import os
+from os import path
 import pprint
 
 def choose_mode ():
@@ -23,13 +24,14 @@ def choose_mode ():
     # Select how search text will be sourced
     while sourcetype not in ("y", "Y", "n", "N"):
         sourcetype = input("Will files be read from a folder? Y/N\n")
-
+        
         if sourcetype in ("y", "Y"):
             sourcetype = input("Will a single file be read? Y/N\n")
             if sourcetype in ("y", "Y"):
                 print("You will be asked for the file name later.")
                 output_dict["sourcetype"] = "file"
-            else:
+            elif sourcetype in ("n", "N"):
+                print("You will be asked for the folder name later.")
                 output_dict["sourcetype"] = "folder"
             continue
         
@@ -69,7 +71,7 @@ def choose_mode ():
     output_dict["tag"] = tag
     
     while class_ is None and searchtype in ("1", "2", "3", "4"):
-        if searchtype == "1": class_ = input("\nWhat class will be searched?\Leave it blank to search all classes\n")
+        if searchtype == "1": class_ = input("\nWhat class will be searched?\nLeave it blank to search all classes\n")
         if searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
         if searchtype == "3": class_ = ""
         if searchtype == "4":
@@ -81,15 +83,19 @@ def choose_mode ():
 
 ####################################################################################################
 
-def process_files_in_folder ():
+def process_files_in_folder (folder):
     """
-    Input: dictionary with parameters
-    Objective: read the html files
-    Output: 
+    Input: folder path
+    Objective: find html files in the same folder
+    Output: list with filenames
     """
-        
-    # Find file(s)
-    files = os.listdir()
+    
+    if folder == "":
+        # Find file(s) in same folder
+        files = os.listdir()
+    else:
+        # Find file(s) in other folder
+        files = os.listdir(folder)
 
     # Get a list with just html file names
     htmlfiles  = []
@@ -121,23 +127,34 @@ and attibutes within a particular tag and class (optional).\n
     mode = choose_mode()
     
     file = ""
-    if mode ["sourcetype"] == "file"   :
-        while file = "":
+    if mode ["sourcetype"] == "file":
+        while file == "":
             file = input('Insert the file name, with ".html" at the end.\n')
         htmlfiles = [file]
 
-    if mode ["sourcetype"] == "folder" :
-        htmlfiles = process_files_in_folder()
+    folder = ""
+    if mode ["sourcetype"] == "folder":        
+        print("Insert the folder absolute path. If it's the same folder as this script, hit ""Enter"".")
+        folder = input("")
+        htmlfiles = process_files_in_folder(folder)
         
     for file in htmlfiles:
+        if "\\" not in file:
+            absolute_file_location = os.path.join(folder,file) #Join path and filename if a path is involved
+        else:
+            absolute_file_location = file
+            
         if   mode ["searchtype"] == "Single":
-            results = htmlparser.extract_tags_classes_exact(file, mode["tag"], mode["class_"])
+            results = htmlparser.extract_tags_classes_exact(
+                absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "Approximate":
-            results = htmlparser.extract_tags_classes_approximate(file, mode["tag"], mode["class_"])
+            results = htmlparser.extract_tags_classes_approximate(
+                absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "All":
-            results = htmlparser.extract_tags_classes_exact(file, "", "")
+            results = htmlparser.extract_tags_classes_exact(
+                absolute_file_location, "", "")
     
 #    print(type(results))
 #    print(len(results))
