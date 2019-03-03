@@ -86,7 +86,7 @@ SOURCETYPE_INPUTS = (("file"    , "alice.html"),
                      ("website" , ""),
                      ("database", "")
                      )
-SEARCHTYPE_INPUTS = ("Single", "Approximate", "All", "List")
+SEARCHTYPE_INPUTS = ("Exact", "Approximate", "All", "List")
 TAG_INPUTS        = ("title", "p", "a")
 CLASS__INPUTS     = ("story", "tory")
 
