@@ -81,16 +81,21 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 ####################################################################################################
 
 # Possible user inputs
-SOURCETYPE_INPUTS = ("file", "folder", "website", "database")
+SOURCETYPE_INPUTS = (("file"    , "alice.html"),
+                     ("folder"  , r"C:\Temp"),
+                     ("website" , ""),
+                     ("database", "")
+                     )
 SEARCHTYPE_INPUTS = ("Single", "Approximate", "All", "List")
 TAG_INPUTS        = ("title", "p", "a")
 CLASS__INPUTS     = ("story", "tory")
 
 # Simulated user input through the generation of several dictionaries
 def user_input_simulation (sourcetypes,
+                           searchtypes,
                            tags       ,
                            classes    , 
-                           searchtypes):
+                           ):
     """
     Input: Tuples with possible inputs by the user.
     Output: List with dictionaries representing possible user input.
@@ -116,10 +121,20 @@ def user_input_simulation (sourcetypes,
     print("Generated {0} possible user inputs".format(len(output_list)))
     return output_list
 
+def test_main():
+    """
+    Uses simulated input to create multiple search patterns
+    """
+    test = user_input_simulation(SOURCETYPE_INPUTS,
+                                 SEARCHTYPE_INPUTS,
+                                 TAG_INPUTS,
+                                 CLASS__INPUTS)
+    for condition in test:
+        print("\nTest", test.index(condition)+1, "/", len(test), condition)
+        main.main(condition)
+
+    return None
+    
 ## Uncomment to test:
-test = user_input_simulation(SOURCETYPE_INPUTS, SEARCHTYPE_INPUTS, TAG_INPUTS, CLASS__INPUTS)
-#pprint.pprint(test)
-
-main.main(test[0])
-
+test_main()
 ####################################################################################################

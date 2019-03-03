@@ -20,33 +20,54 @@ def choose_mode ():
     tag        = None
     class_     = None
     searchtype = None
+    answer     = None
 
+    print("""
+This script will analyze one or more .html files and extract the text
+and attibutes within a particular tag and class (optional).
+    """)
+    
     # Select how search text will be sourced
-    while sourcetype not in ("y", "Y", "n", "N"):
-        sourcetype = input("Will files be read from a folder? Y/N\n")
+    while answer not in ("y", "Y", "n", "N"):
+        answer = input("Will files be read from a folder? Y/N\n")
         
-        if sourcetype in ("y", "Y"):
-            sourcetype = input("Will a single file be read? Y/N\n")
-            if sourcetype in ("y", "Y"):
-                print("You will be asked for the file name later.")
-                output_dict["sourcetype"] = "file"
-            elif sourcetype in ("n", "N"):
-                print("You will be asked for the folder name later.")
-                output_dict["sourcetype"] = "folder"
+        if answer in ("y", "Y"):
+            answer = input("Will a single file be read? Y/N\n")
+            if answer in ("y", "Y"):
+#                output_dict["sourcetype"] = "file"
+                sourcetype = "file"
+            elif answer in ("n", "N"):
+#                output_dict["sourcetype"] = "folder"
+                sourcetype = "folder"
             continue
         
-        elif sourcetype in ("n", "N"):
-            sourcetype = input("Will files be read from a website? Y/N\n")
-            if sourcetype in ("y", "Y"): output_dict["sourcetype"] = "website"
+        elif answer in ("n", "N"):
+            answer = input("Will files be read from a website? Y/N\n")
+            if answer in ("y", "Y"):
+                sourcetype = "website"
         
-            elif sourcetype in ("n", "N"):
-                sourcetype = input("Will fields be read from a database? Y/N\n")
-                
-                if sourcetype in ("y", "Y"):
-                    output_dict["sourcetype"] = "database"
+            elif answer in ("n", "N"):
+                answer = input("Will fields be read from a database? Y/N\n")                
+                if answer in ("y", "Y"):
+                    sourcetype = "database"
+
                 else:
                     print ("Incorrect input. Please start over...")
                     return output_dict
+
+    # Get file name if it is a single file
+    if sourcetype == "file":
+        file = ""
+        while file == "":
+            file = input('Insert the file name, with ".html" at the end.\n')
+            output_dict ["sourcetype"] = (sourcetype, file)
+
+    # Get file name if it is a single folder
+    if sourcetype == "folder":        
+        folder = ""
+        print("Insert the folder absolute path. If it's the same folder as this script, hit ""Enter"".")
+        folder = input("")
+        output_dict ["sourcetype"] = (sourcetype, folder)
 
     # Select how tags will be searched
     while searchtype not in ("1", "2", "3", "4"):
@@ -56,7 +77,7 @@ def choose_mode ():
         print("3. Search across all tags and classes.")
         print("4. Load search terms from a list.")        
         searchtype = input("Type your choice. ")
-    if   searchtype == "1": output_dict["searchtype"] = "Single"
+    if   searchtype == "1": output_dict["searchtype"] = "Exact"
     elif searchtype == "2": output_dict["searchtype"] = "Approximate"
     elif searchtype == "3": output_dict["searchtype"] = "All"
     elif searchtype == "4": output_dict["searchtype"] = "List"
@@ -119,32 +140,32 @@ def main (mode):
                 in a local folder or in a remote location.                
     Output: an html file consisting of just those tags. No styles will be copied.
     """
-    print("""
-This script will analyze one or more .html files and extract the text
-and attibutes within a particular tag and class (optional).\n
-    """)
     results = ""
-    if mode == "": mode = choose_mode() 
+    if mode == "": mode = choose_mode() # Usual state of affairs
     
-    file = ""
-    if mode ["sourcetype"] == "file":
-        while file == "":
-            file = input('Insert the file name, with ".html" at the end.\n')
+    # Generate a file list
+    if mode["sourcetype"][0] == "file":
+        folder    = ""
+        file      = mode["sourcetype"][1]
         htmlfiles = [file]
-
-    folder = ""
-    if mode ["sourcetype"] == "folder":        
-        print("Insert the folder absolute path. If it's the same folder as this script, hit ""Enter"".")
-        folder = input("")
-        htmlfiles = process_files_in_folder(folder)
-        
+    
+    elif mode["sourcetype"][0] == "folder":
+        folder = mode["sourcetype"][1]
+        htmlfiles = process_files_in_folder(mode["sourcetype"][1])
+    
+    else:
+        print("Websites or databases can't be processed yet")
+        return results 
+    
+    # Process our file list
     for file in htmlfiles:
         if "\\" not in file:
-            absolute_file_location = os.path.join(folder,file) #Join path and filename if a path is involved
+            absolute_file_location = os.path.join(folder,file)
+            # Join path and filename if a path is involved
         else:
             absolute_file_location = file
             
-        if   mode ["searchtype"] == "Single":
+        if   mode ["searchtype"] == "Exact":
             results = htmlparser.extract_tags_classes_exact(
                 absolute_file_location, mode["tag"], mode["class_"])
     
@@ -156,9 +177,8 @@ and attibutes within a particular tag and class (optional).\n
             results = htmlparser.extract_tags_classes_exact(
                 absolute_file_location, "", "")
     
-    print(type(results))
-    print(len(results))
-    print(results)
+    print("Results:", len(results), "Type:", type(results))
+#    print(results)
     """
         Next steps:
         convert "results" to something from where links can be read and visited
@@ -173,7 +193,8 @@ and attibutes within a particular tag and class (optional).\n
     return results
 
 ####################################################################################################
-    
-#test = main("")
-#pprint.pprint(test)
+
+## Uncomment to run
+#run = main("")
+#pprint.pprint(run)
     
