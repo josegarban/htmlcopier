@@ -83,7 +83,7 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 
 # Possible user inputs
 SOURCETYPE_INPUTS = (("file"    , "alice.html"),
-                     #("folder"  , r"C:\Temp"),
+                     ("folder"  , r"C:\Temp"),
                      #("website" , ""),
                      #("database", "")
                      )
@@ -123,7 +123,7 @@ def user_input_simulation (sourcetypes,
                     elif searchtype == "Exact" and (tag == "" or class_ == ""):
                         True    # Exclude incongruent choice
                     else:
-                            output_list.append({"sourcetype": sourcetype,
+                        output_list.append({"sourcetype": sourcetype,
                                             "tag"       : tag,
                                             "class_"    : class_,
                                             "searchtype": searchtype
@@ -148,11 +148,15 @@ def test_main():
     for condition in test: print(condition)
     
     for condition in test:
-        print("\n\nTest", test.index(condition)+1, "/", len(test), condition)
+        index = test.index(condition) + 1
+        print("\n\nTest", index, "/", len(test), condition)
         result = main.main(condition)
     
-#        pprint.pprint(result)
-        
+        with open ("output"+str(index)+".html", "w", encoding="utf8") as myfile:                
+            for item in result:
+                myfile.write(str(item))
+            myfile.close()
+            
     return None
     
 ## Uncomment to test:
