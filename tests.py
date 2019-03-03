@@ -1,6 +1,7 @@
 import pprint
 import htmlparser
 import main
+from bs4 import BeautifulSoup
 
 ####################################################################################################
 # htmlparser.py tests
@@ -83,10 +84,14 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 # Possible user inputs
 SOURCETYPE_INPUTS = (("file"    , "alice.html"),
                      ("folder"  , r"C:\Temp"),
-                     ("website" , ""),
-                     ("database", "")
+                     #("website" , ""),
+                     #("database", "")
                      )
-SEARCHTYPE_INPUTS = ("Exact", "Approximate", "All", "List")
+SEARCHTYPE_INPUTS = ("Exact",
+                     "Approximate",
+                     "All",
+                     #"List"
+                     )
 TAG_INPUTS        = ("title", "p", "a")
 CLASS__INPUTS     = ("story", "tory")
 
@@ -121,6 +126,8 @@ def user_input_simulation (sourcetypes,
     print("Generated {0} possible user inputs".format(len(output_list)))
     return output_list
 
+####################################################################################################
+
 def test_main():
     """
     Uses simulated input to create multiple search patterns
@@ -130,11 +137,27 @@ def test_main():
                                  TAG_INPUTS,
                                  CLASS__INPUTS)
     for condition in test:
-        print("\nTest", test.index(condition)+1, "/", len(test), condition)
-        main.main(condition)
-
+        print("\n\nTest", test.index(condition)+1, "/", len(test), condition)
+        result = main.main(condition)
+    
+#        tags = []
+#        for tag in result:
+#            if str(tag) not in tags:
+#                tags.append(str(tag))
+#                print(tag, "\n")
+#                result.tag.name.decompose()
+                
+#        with open("output"+str(test.index(condition)+1)+".html", "w") as file:
+#            for tag in result:
+#                file.write(str(tag))
+        
+        
+        
     return None
     
 ## Uncomment to test:
 test_main()
+
+####################################################################################################
+# .py tests
 ####################################################################################################

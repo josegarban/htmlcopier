@@ -34,10 +34,8 @@ and attibutes within a particular tag and class (optional).
         if answer in ("y", "Y"):
             answer = input("Will a single file be read? Y/N\n")
             if answer in ("y", "Y"):
-#                output_dict["sourcetype"] = "file"
                 sourcetype = "file"
             elif answer in ("n", "N"):
-#                output_dict["sourcetype"] = "folder"
                 sourcetype = "folder"
             continue
         
@@ -127,7 +125,6 @@ def process_files_in_folder (folder):
     else:
         print("The following files were found:")
         pprint.pprint(htmlfiles)
-        print("")
 
     return htmlfiles
 
@@ -138,7 +135,9 @@ def main (mode):
     Input: blank, if set by user. For testing, a dictionary may be used to simulate user input.
     Objective: retrieve tags of a certain class (optional) in one or more html files
                 in a local folder or in a remote location.                
-    Output: an html file consisting of just those tags. No styles will be copied.
+    Output:
+        Current: a dictionary with attributes to be converted to an html file
+        Goal: an html file consisting of just those tags. No styles will be copied.
     """
     results = ""
     if mode == "": mode = choose_mode() # Usual state of affairs
@@ -174,8 +173,8 @@ def main (mode):
                 absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "All":
-            results = htmlparser.extract_tags_classes_exact(
-                absolute_file_location, "", "")
+            results = htmlparser.extract_all_tags_classes(
+                absolute_file_location)
     
     print("Results:", len(results), "Type:", type(results))
 #    print(results)
@@ -185,10 +184,6 @@ def main (mode):
         convert "results" to a compact html page, maybe links can be read and visited from here
         probably a dictionary with "a/link-to" attributes is needed
     """
-
-#    if mode ["sourcetype"] == "website":
-    
-#    if mode ["sourcetype"] == "database":
 
     return results
 
