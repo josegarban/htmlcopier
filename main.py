@@ -112,9 +112,9 @@ def process_files_in_folder (folder):
 
 ####################################################################################################
 
-def main ():
+def main (mode):
     """
-    Input: set by user.
+    Input: blank, if set by user. For testing, a dictionary may be used to simulate user input.
     Objective: retrieve tags of a certain class (optional) in one or more html files
                 in a local folder or in a remote location.                
     Output: an html file consisting of just those tags. No styles will be copied.
@@ -124,7 +124,7 @@ This script will analyze one or more .html files and extract the text
 and attibutes within a particular tag and class (optional).\n
     """)
     results = ""
-    mode = choose_mode()
+    if mode == "": mode = choose_mode() 
     
     file = ""
     if mode ["sourcetype"] == "file":
@@ -156,14 +156,15 @@ and attibutes within a particular tag and class (optional).\n
             results = htmlparser.extract_tags_classes_exact(
                 absolute_file_location, "", "")
     
-#    print(type(results))
-#    print(len(results))
-#    print(results)
-"""   Next steps:
+    print(type(results))
+    print(len(results))
+    print(results)
+    """
+        Next steps:
         convert "results" to something from where links can be read and visited
         convert "results" to a compact html page, maybe links can be read and visited from here
         probably a dictionary with "a/link-to" attributes is needed
-"""
+    """
 
 #    if mode ["sourcetype"] == "website":
     
@@ -173,6 +174,6 @@ and attibutes within a particular tag and class (optional).\n
 
 ####################################################################################################
     
-test = main()
-pprint.pprint(test)
+#test = main("")
+#pprint.pprint(test)
     

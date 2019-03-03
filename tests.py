@@ -1,4 +1,6 @@
+import pprint
 import htmlparser
+import main
 
 ####################################################################################################
 # htmlparser.py tests
@@ -28,8 +30,9 @@ def test_find_all_tags(html_filename):
     print(test)
     return None
 
-test_find_all_classes(ALICE)
-test_find_all_tags(ALICE)
+## Uncomment to test:
+#test_find_all_classes(ALICE)
+#test_find_all_tags(ALICE)
 
 ####################################################################################################
 
@@ -68,6 +71,55 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 
     return None
 
-test_extract_tags_classes_exact(ALICE,"p","story")
-test_extract_tags_classes_approximate(ALICE,"p","tory")
+## Uncomment to test:
+#test_extract_tags_classes_exact(ALICE,"p","story")
+#test_extract_tags_classes_approximate(ALICE,"p","tory")
 
+
+####################################################################################################
+# main.py tests
+####################################################################################################
+
+# Possible user inputs
+SOURCETYPE_INPUTS = ("file", "folder", "website", "database")
+SEARCHTYPE_INPUTS = ("Single", "Approximate", "All", "List")
+TAG_INPUTS        = ("title", "p", "a")
+CLASS__INPUTS     = ("story", "tory")
+
+# Simulated user input through the generation of several dictionaries
+def user_input_simulation (sourcetypes,
+                           tags       ,
+                           classes    , 
+                           searchtypes):
+    """
+    Input: Tuples with possible inputs by the user.
+    Output: List with dictionaries representing possible user input.
+    """
+    output_list = []
+    
+    innerdict = {"sourcetype": None,
+                 "tag"       : None,
+                 "class_"    : None,
+                 "searchtype": None,
+         }
+    
+    for sourcetype in sourcetypes:
+        for tag in tags:
+            for class_ in classes:
+                for searchtype in searchtypes:
+                    output_list.append({"sourcetype": sourcetype,
+                                        "tag"       : tag,
+                                        "class_"    : class_,
+                                        "searchtype": searchtype
+                                        })
+
+    print("Generated {0} possible user inputs".format(len(output_list)))
+    return output_list
+
+## Uncomment to test:
+test = user_input_simulation(SOURCETYPE_INPUTS, SEARCHTYPE_INPUTS, TAG_INPUTS, CLASS__INPUTS)
+#pprint.pprint(test)
+
+main.main(test[0])
+
+####################################################################################################
