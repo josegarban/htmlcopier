@@ -159,7 +159,12 @@ and attibutes within a particular tag and class (optional).\n
 #    print(type(results))
 #    print(len(results))
 #    print(results)
-    
+"""   Next steps:
+        convert "results" to something from where links can be read and visited
+        convert "results" to a compact html page, maybe links can be read and visited from here
+        probably a dictionary with "a/link-to" attributes is needed
+"""
+
 #    if mode ["sourcetype"] == "website":
     
 #    if mode ["sourcetype"] == "database":
@@ -168,6 +173,6 @@ and attibutes within a particular tag and class (optional).\n
 
 ####################################################################################################
     
-main()
-    
+test = main()
+pprint.pprint(test)
     
