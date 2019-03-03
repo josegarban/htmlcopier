@@ -47,8 +47,7 @@ def file_to_string (filename):
     except:
         print("\n    Failed to open {0}.\n".format(filename))
         
-    finally:
-        return output_string  
+    return output_string  
 
 ####################################################################################################
 
@@ -99,14 +98,17 @@ def extract_tags_classes_exact(html_filename, wanted_tag, wanted_class_):
 
     html_string = file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
+    output_snippets = []
     
     if wanted_class_ != "" and wanted_tag != "":
-        output_snippets = soup.find_all(wanted_tag, wanted_class_)
+        for item in soup.find_all(wanted_tag, wanted_class_):
+            output_snippets.append(item)        
         print('    {0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
             len(output_snippets), wanted_tag, wanted_class_, html_filename))
 
     elif wanted_class_ == "" and wanted_tag != "":
-        output_snippets = soup.find_all(wanted_tag)   
+        for item in soup.find_all(wanted_tag):
+            output_snippets.append(item)
         print('    {0} <{1}> tags were retrieved in the file {2}.\n'.format(
             len(output_snippets), wanted_tag, html_filename))
 
@@ -134,6 +136,7 @@ def extract_tags_classes_approximate(html_filename, wanted_tag, wanted_class_):
 
     html_string = file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
+    output_snippets = []
     
     # Get all tags similar to tag
     if wanted_tag != "":
@@ -160,8 +163,9 @@ def extract_tags_classes_approximate(html_filename, wanted_tag, wanted_class_):
                 snippets = soup.find_all(tag, class_)
                 print('      {0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
                     len(snippets), tag, class_, html_filename))
-                output_snippets.append(tag)
-        #print (output_snippets)
+                if len(snippets) > 0: # Don't add empty search results
+                    for snippet in snippets:
+                        output_snippets.append(snippet)
 
     elif wanted_class_ == "" and wanted_tag != "":
         output_snippets = []
@@ -169,22 +173,19 @@ def extract_tags_classes_approximate(html_filename, wanted_tag, wanted_class_):
             snippets = soup.find_all(tag)
             print('      {0} <{1}> tags were retrieved in the file {2}.\n'.format(
                 len(snippets), tag, html_filename))
-            output_snippets.append(tag)
-        #print (output_snippets)
+            if len(snippets) > 0: # Don't add empty search results
+                for snippet in snippets:
+                    output_snippets.append(snippet)
         
     elif wanted_class_ != "" and wanted_tag == "":
         output_snippets = []
-        for tag in soup.find_all():
-            if tag.get("class") is not None:
-                classes_in_tag = tag.get("class")
-                for class_in_tag in classes_in_tag:
-                
-                    if class_in_tag in list(similar_classes):
-                        output_snippets.append(tag)   
+        for similar_class in similar_classes:
+            snippets = soup.find_all(class_=similar_class)
+            for snippet in snippets:
+                output_snippets.append(snippet)
         
         print('      {0} tags with classes similar to "{1}" were retrieved in the file {2}.\n'.format(
             len(output_snippets), wanted_class_, html_filename))
-        #print (output_snippets)
     
     return output_snippets
 
@@ -200,13 +201,15 @@ def extract_all_tags_classes(html_filename):
 
     html_string = file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
+
+    all_tags = soup.find_all()
     
     output_snippets = []
     
-    print('      {0} tags of all types and classes were retrieved in the file {1}.\n'.format(
-        len(soup.find_all()), html_filename))
-    # print (output_snippets)
-        
+    print('      {0} tags of all types and classes were retrieved in the file {1}.'.format(
+        len(all_tags), html_filename))
+
+    for tag in all_tags:
+        output_snippets.append(tag)
+
     return output_snippets
-
-

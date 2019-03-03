@@ -83,7 +83,7 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 
 # Possible user inputs
 SOURCETYPE_INPUTS = (("file"    , "alice.html"),
-                     ("folder"  , r"C:\Temp"),
+                     #("folder"  , r"C:\Temp"),
                      #("website" , ""),
                      #("database", "")
                      )
@@ -92,8 +92,15 @@ SEARCHTYPE_INPUTS = ("Exact",
                      "All",
                      #"List"
                      )
-TAG_INPUTS        = ("title", "p", "a")
-CLASS__INPUTS     = ("story", "tory")
+TAG_INPUTS        = ("",
+                     "title",
+                     "p",
+                     "a",
+                     )
+CLASS__INPUTS     = ("",
+                     "story",
+                     "tory",
+                     )
 
 # Simulated user input through the generation of several dictionaries
 def user_input_simulation (sourcetypes,
@@ -107,23 +114,23 @@ def user_input_simulation (sourcetypes,
     """
     output_list = []
     
-    innerdict = {"sourcetype": None,
-                 "tag"       : None,
-                 "class_"    : None,
-                 "searchtype": None,
-         }
-    
     for sourcetype in sourcetypes:
         for tag in tags:
             for class_ in classes:
                 for searchtype in searchtypes:
-                    output_list.append({"sourcetype": sourcetype,
-                                        "tag"       : tag,
-                                        "class_"    : class_,
-                                        "searchtype": searchtype
-                                        })
-
+                    if searchtype == "All" and (class_ != "" or tag != ""): 
+                        True    # Exclude incongruent choice
+                    elif searchtype == "Exact" and (tag == "" or class_ == ""):
+                        True    # Exclude incongruent choice
+                    else:
+                            output_list.append({"sourcetype": sourcetype,
+                                            "tag"       : tag,
+                                            "class_"    : class_,
+                                            "searchtype": searchtype
+                                            })
+    
     print("Generated {0} possible user inputs".format(len(output_list)))
+
     return output_list
 
 ####################################################################################################
@@ -132,26 +139,19 @@ def test_main():
     """
     Uses simulated input to create multiple search patterns
     """
+    print("\n#####################################################################################")
+    print("Testing valid user search requests")
     test = user_input_simulation(SOURCETYPE_INPUTS,
                                  SEARCHTYPE_INPUTS,
                                  TAG_INPUTS,
                                  CLASS__INPUTS)
+    for condition in test: print(condition)
+    
     for condition in test:
         print("\n\nTest", test.index(condition)+1, "/", len(test), condition)
         result = main.main(condition)
     
-#        tags = []
-#        for tag in result:
-#            if str(tag) not in tags:
-#                tags.append(str(tag))
-#                print(tag, "\n")
-#                result.tag.name.decompose()
-                
-#        with open("output"+str(test.index(condition)+1)+".html", "w") as file:
-#            for tag in result:
-#                file.write(str(tag))
-        
-        
+#        pprint.pprint(result)
         
     return None
     

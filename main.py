@@ -5,7 +5,6 @@ be it saved files or records from a database
 
 import htmlparser
 import os
-from os import path
 import pprint
 
 def choose_mode ():
