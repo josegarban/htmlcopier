@@ -1,5 +1,6 @@
 import pprint
 import htmlparser
+import filegenerator
 import main
 from bs4 import BeautifulSoup
 
@@ -83,7 +84,7 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 
 # Possible user inputs
 SOURCETYPE_INPUTS = (("file"    , "alice.html"),
-                     ("folder"  , r"C:\Temp"),
+                     #("folder"  , r"C:\Temp"),
                      #("website" , ""),
                      #("database", "")
                      )
@@ -101,12 +102,18 @@ CLASS__INPUTS     = ("",
                      "story",
                      "tory",
                      )
+OUTPUTTYPE_INPUTS = ((".html", "output"),
+                     #(".pdf", "output"),
+                     #("current.sqlite", "output.sqlite"),
+                     #("fresh.sqlite", "output"),
+                     )
 
 # Simulated user input through the generation of several dictionaries
 def user_input_simulation (sourcetypes,
                            searchtypes,
                            tags       ,
-                           classes    , 
+                           classes    ,
+                           outputtypes,
                            ):
     """
     Input: Tuples with possible inputs by the user.
@@ -118,16 +125,18 @@ def user_input_simulation (sourcetypes,
         for tag in tags:
             for class_ in classes:
                 for searchtype in searchtypes:
-                    if searchtype == "All" and (class_ != "" or tag != ""): 
-                        True    # Exclude incongruent choice
-                    elif searchtype == "Exact" and (tag == "" or class_ == ""):
-                        True    # Exclude incongruent choice
-                    else:
-                        output_list.append({"sourcetype": sourcetype,
-                                            "tag"       : tag,
-                                            "class_"    : class_,
-                                            "searchtype": searchtype
-                                            })
+                    for outputtype in outputtypes:
+                        if searchtype == "All" and (class_ != "" or tag != ""): 
+                            True    # Exclude incongruent choice
+                        elif searchtype == "Exact" and (tag == "" or class_ == ""):
+                            True    # Exclude incongruent choice
+                        else:
+                            output_list.append({"sourcetype": sourcetype,
+                                                "tag"       : tag,
+                                                "class_"    : class_,
+                                                "searchtype": searchtype,
+                                                "outputtype": outputtype
+                                                })
     
     print("Generated {0} possible user inputs".format(len(output_list)))
 
@@ -144,7 +153,9 @@ def test_main():
     test = user_input_simulation(SOURCETYPE_INPUTS,
                                  SEARCHTYPE_INPUTS,
                                  TAG_INPUTS,
-                                 CLASS__INPUTS)
+                                 CLASS__INPUTS,
+                                 OUTPUTTYPE_INPUTS,
+                                 )
     for condition in test: print(condition)
     
     for condition in test:
@@ -152,10 +163,10 @@ def test_main():
         print("\n\nTest", index, "/", len(test), condition)
         result = main.main(condition)
     
-        with open ("output"+str(index)+".html", "w", encoding="utf8") as myfile:                
-            for item in result:
-                myfile.write(str(item))
-            myfile.close()
+#        with open ("output"+str(index)+".html", "w", encoding="utf8") as myfile:                
+#            for item in result:
+#                myfile.write(str(item))
+#            myfile.close()
             
     return None
     

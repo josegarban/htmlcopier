@@ -4,6 +4,7 @@ be it saved files or records from a database
 """
 
 import htmlparser
+import filegenerator
 import os
 import pprint
 
@@ -15,11 +16,12 @@ def choose_mode ():
     """
 
     output_dict = {}    
+    answer     = None
     sourcetype = None
     tag        = None
     class_     = None
     searchtype = None
-    answer     = None
+    outputtype = None
 
     print("""
 This script will analyze one or more .html files and extract the text
@@ -79,6 +81,7 @@ and attibutes within a particular tag and class (optional).
     elif searchtype == "3": output_dict["searchtype"] = "All"
     elif searchtype == "4": output_dict["searchtype"] = "List"
 
+    # Tag search
     while tag is None and searchtype in ("1", "2", "3", "4"):
         if searchtype == "1": tag = input("\nWhat tag will be searched?\nLeave it blank to search all tags\n")
         if searchtype == "2": tag = input("\nWhat string should appear in the tag name(s)?\n")
@@ -88,6 +91,7 @@ and attibutes within a particular tag and class (optional).
             tag = ""
     output_dict["tag"] = tag
     
+    # Class search
     while class_ is None and searchtype in ("1", "2", "3", "4"):
         if searchtype == "1": class_ = input("\nWhat class will be searched?\nLeave it blank to search all classes\n")
         if searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
@@ -96,7 +100,37 @@ and attibutes within a particular tag and class (optional).
             print("Loading files is not yet available!")
             class_ = ""
     output_dict["class_"] = class_
+    
+    # Output generation
+    while outputtype not in ("1", "2", "3", "4"):
+        print("\nHow should the output be produced?")
+        print("1. .html file.")
+        print("2. .pdf file.")
+        print("3. Current .sqlite database.")
+        print("4. Fresh .sqlite database.")
+        outputtype = input("Type your choice. ")
         
+    if  outputtype == "1":
+        outputfile = "html"
+        outputname = "output"
+         
+    elif outputtype == "2":
+        outputfile  = "pdf"
+        print(".pdf output not available yet!")
+        outputname = "output"
+
+    elif outputtype == "3":
+        outputfile = "current.sqlite"
+        print(".sqlite output not available yet!")
+        #outputname = input("Insert filename or path without the .sqlite extension")
+
+    elif outputtype == "4":
+        outputfile = "fresh.sqlite"
+        print(".sqlite output not available yet!")
+        outputname = "output"
+    
+    output_dict["outputtype"] = (outputfile, outputname)
+    
     return output_dict
 
 ####################################################################################################
@@ -138,7 +172,7 @@ def main (mode):
         Current: a dictionary with attributes to be converted to an html file
         Goal: an html file consisting of just those tags. No styles will be copied.
     """
-    results = ""
+    results = {}
     if mode == "": mode = choose_mode() # Usual state of affairs
     
     # Generate a file list
@@ -164,24 +198,31 @@ def main (mode):
             absolute_file_location = file
             
         if   mode ["searchtype"] == "Exact":
-            results = htmlparser.extract_tags_classes_exact(
+            results[file] = htmlparser.extract_tags_classes_exact(
                 absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "Approximate":
-            results = htmlparser.extract_tags_classes_approximate(
+            results[file] = htmlparser.extract_tags_classes_approximate(
                 absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "All":
-            results = htmlparser.extract_all_tags_classes(
+            results[file] = htmlparser.extract_all_tags_classes(
                 absolute_file_location)
     
-    print("Results:", len(results), "Type:", type(results))
-#    print(results)
+    print("Total files processed:", len(results), "Type:", type(results))
+    for file in results:
+        print("  {0} results in file {1}.".format(len(results[file]), file, ))  
+
+    # Prepare the output file
+    timestamp = filegenerator.generate_longtimestamp()
+
+    if  mode["outputtype"][0] == ".html":
+        filename = mode["outputtype"][1] +"_" + timestamp + ".html"
+        filegenerator.dict_to_simplehtml (results, filename)
+    
     """
         Next steps:
-        convert "results" to something from where links can be read and visited
-        convert "results" to a compact html page, maybe links can be read and visited from here
-        probably a dictionary with "a/link-to" attributes is needed
+        for the sql version probably a dictionary with "a/link-to" attributes is needed
     """
 
     return results
