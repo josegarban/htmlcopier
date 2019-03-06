@@ -7,7 +7,7 @@ import htmlparser
 import filegenerator
 import userinput
 import pprint
-
+import os
 
 ####################################################################################################
 
@@ -57,16 +57,16 @@ def main (mode):
             results[file] = htmlparser.extract_all_tags_classes(
                 absolute_file_location)
     
-    print("Total files processed:", len(results), "Type:", type(results))
+    print("\nTotal files processed:", len(results), "Type:", type(results))
     for file in results:
         print("  {0} results in file {1}.".format(len(results[file]), file, ))  
 
     # Prepare the output file
     timestamp = filegenerator.generate_longtimestamp()
 
-    if  mode["outputtype"][0] == "html":
+    if  mode["outputtype"][0] == ".html":
         filename = mode["outputtype"][1] +"_" + timestamp + ".html"
-        filegenerator.dict_to_simplehtml (results, filename)
+        filegenerator.dict_to_simplehtml(results, filename)
     
     """
         Next steps:
@@ -77,7 +77,5 @@ def main (mode):
 
 ####################################################################################################
 
-## Uncomment to run
-run = main("")
-pprint.pprint(run)
+
     

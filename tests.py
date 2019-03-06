@@ -5,6 +5,11 @@ import userinput
 import main
 
 ####################################################################################################
+## Uncomment to run actual script
+#run = main("")
+#pprint.pprint(run)
+
+####################################################################################################
 # htmlparser.py tests
 ####################################################################################################
 
@@ -88,19 +93,21 @@ SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
                      #("website" , ""),
                      #("database", "")
                      )
-SEARCHTYPE_INPUTS = ("Exact",
+SEARCHTYPE_INPUTS = (#"Exact",
                      "Approximate",
-                     "All",
+                     #"All",
                      #"List"
                      )
-TAG_INPUTS        = ("",
-                     "title",
-                     "p",
-                     "a",
+TAG_INPUTS        = (("",),
+                     #("title",),
+                     #("p",),
+                     #("a",),
+                     ("title", "head")
                      )
-CLASS__INPUTS     = ("",
-                     "story",
-                     "tory",
+CLASS__INPUTS     = (("",),
+                     #("story",),
+                     #("tory",),
+                     ("story", "tory"),
                      )
 OUTPUTTYPE_INPUTS = ((".html", "output"),
                      #(".pdf", "output"),
@@ -126,9 +133,9 @@ def user_input_simulation (sourcetypes,
             for class_ in classes:
                 for searchtype in searchtypes:
                     for outputtype in outputtypes:
-                        if searchtype == "All" and (class_ != "" or tag != ""): 
+                        if searchtype == "All" and (class_ != ("",) or tag != ("",)): 
                             True    # Exclude incongruent choice
-                        elif searchtype == "Exact" and (tag == "" or class_ == ""):
+                        elif searchtype != "All" and (tag == ("",) and class_ == ("",)):
                             True    # Exclude incongruent choice
                         else:
                             output_list.append({"sourcetype": sourcetype,
@@ -166,8 +173,21 @@ def test_main():
     return None
     
 ## Uncomment to test:
-test_main()
+#test_main()
 
 ####################################################################################################
-# .py tests
+# filegenerator.py tests
 ####################################################################################################
+
+#TEXT = "sampletest.txt"
+#CLASSES = "classlist.txt"
+#TAGS = "taglist.txt"
+#test = filegenerator.txt_to_list(CLASSES)
+#test = filegenerator.txt_to_list(TAGS)
+#print(type(test))
+
+####################################################################################################
+# userinput.py tests
+####################################################################################################
+
+pprint.pprint(userinput.choose_primary_mode())

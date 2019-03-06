@@ -1,3 +1,5 @@
+import filegenerator
+
 """
 Functions to obtain user input
 """
@@ -9,13 +11,15 @@ def choose_primary_mode ():
     Output: Dictionary containing the search parameters.
     """
 
-    output_dict = {}    
-    answer     = None
-    sourcetype = None
-    tag        = None
-    class_     = None
-    searchtype = None
-    outputtype = None
+    output_dict  = {}    
+    answer       = None
+    sourcetype   = None
+    tag_tuple    = None
+    class__tuple = None
+    searchtype   = None
+    outputtype   = None
+    tagfile      = ""
+    classfile    = ""
 
     print("""
 This script will analyze one or more .html files and extract the text
@@ -76,24 +80,35 @@ and attibutes within a particular tag and class (optional).
     elif searchtype == "4": output_dict["searchtype"] = "List"
 
     # Tag search
-    while tag is None and searchtype in ("1", "2", "3", "4"):
-        if searchtype == "1": tag = input("\nWhat tag will be searched?\nLeave it blank to search all tags\n")
-        if searchtype == "2": tag = input("\nWhat string should appear in the tag name(s)?\n")
-        if searchtype == "3": tag = ""
+    while tag_tuple is None and searchtype in ("1", "2", "3", "4"):
+        if searchtype == "1":
+            tag_tuple = (input("\nWhat tag will be searched?\nLeave it blank to search all tags\n"),)
+        if searchtype == "2":
+            tag_tuple = (input("\nWhat string should appear in the tag name(s)?\n"),)
+        if searchtype == "3":
+            tag_tuple = ("",)
         if searchtype == "4":
-            print("Loading files is not yet available!")
-            tag = ""
-    output_dict["tag"] = tag
-    
+            while ".txt" not in tagfile:
+                print("\nWhat is the name of the .txt file where the tags are?")
+                tagfile = input('Your input must end in .txt. A full path is also valid.\n')
+            tag_tuple   = tuple(filegenerator.txt_to_list(tagfile))
+    output_dict["tag"]  = tag_tuple
+
     # Class search
-    while class_ is None and searchtype in ("1", "2", "3", "4"):
-        if searchtype == "1": class_ = input("\nWhat class will be searched?\nLeave it blank to search all classes\n")
-        if searchtype == "2": class_ = input("\nWhat string should appear in the class name(s)?\n")
-        if searchtype == "3": class_ = ""
+    while class__tuple is None and searchtype in ("1", "2", "3", "4"):
+        if searchtype == "1":
+            print("\nWhat class will be searched?")
+            class__tuple = (input("Leave it blank to search all classes unless you chose to search all tags\n"),)
+        if searchtype == "2":
+            class__tuple = (input("\nWhat string should appear in the class name(s)?\n"),)
+        if searchtype == "3":
+            class__tuple = ("",)
         if searchtype == "4":
-            print("Loading files is not yet available!")
-            class_ = ""
-    output_dict["class_"] = class_
+            while ".txt" not in classfile:
+                print("\nWhat is the name of the .txt file where the classes are?")
+                classfile = input('Your input must end in .txt. A full path is also valid.\n')
+            class__tuple   = tuple(filegenerator.txt_to_list(classfile))
+    output_dict["class_"] = class__tuple
     
     # Output generation
     while outputtype not in ("1", "2", "3", "4"):
