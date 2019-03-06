@@ -32,6 +32,34 @@ def generate_longtimestamp ():
     return timestamp
 
 ####################################################################################################
+
+def html_files_in_folder (folder):
+    """
+    Input: folder path
+    Objective: find html files in the same folder
+    Output: list with filenames
+    """
+    
+    if folder == "":
+        # Find file(s) in same folder
+        files = os.listdir()
+    else:
+        # Find file(s) in other folder
+        files = os.listdir(folder)
+
+    # Get a list with just html file names
+    htmlfiles  = []
+    for file in files: 
+        if ".html" in file: htmlfiles.append(file)
+    if len (htmlfiles) == 0:
+        print("No html files found.")
+    else:
+        print("The following files were found:")
+        pprint.pprint(htmlfiles)
+
+    return htmlfiles
+
+####################################################################################################
 # HTML FILE MANIPULATION
 ####################################################################################################
 
@@ -48,7 +76,8 @@ def dict_to_simplehtml (input_dict, filename):
         
         for key in input_dict:
             myfile.write(r"<strong>File: " + str(key) + "</strong> \n")
-            myfile.write(str(input_dict[key])[1:-1])
+            myfile.write((str(input_dict[key])[1:-1]))
+            myfile.write("<p></p>")
             myfile.write("\n")
 
         myfile.close()    
