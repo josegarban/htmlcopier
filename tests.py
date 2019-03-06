@@ -2,7 +2,6 @@ import pprint
 import htmlparser
 import filegenerator
 import main
-from bs4 import BeautifulSoup
 
 ####################################################################################################
 # htmlparser.py tests
@@ -83,8 +82,8 @@ def test_extract_tags_classes_approximate(file, tag, class_):
 ####################################################################################################
 
 # Possible user inputs
-SOURCETYPE_INPUTS = (("file"    , "alice.html"),
-                     #("folder"  , r"C:\Temp"),
+SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
+                     ("folder"  , r"C:\Temp"),
                      #("website" , ""),
                      #("database", "")
                      )
@@ -163,11 +162,6 @@ def test_main():
         print("\n\nTest", index, "/", len(test), condition)
         result = main.main(condition)
     
-#        with open ("output"+str(index)+".html", "w", encoding="utf8") as myfile:                
-#            for item in result:
-#                myfile.write(str(item))
-#            myfile.close()
-            
     return None
     
 ## Uncomment to test:

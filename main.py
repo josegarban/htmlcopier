@@ -216,7 +216,7 @@ def main (mode):
     # Prepare the output file
     timestamp = filegenerator.generate_longtimestamp()
 
-    if  mode["outputtype"][0] == ".html":
+    if  mode["outputtype"][0] == "html":
         filename = mode["outputtype"][1] +"_" + timestamp + ".html"
         filegenerator.dict_to_simplehtml (results, filename)
     
@@ -230,6 +230,6 @@ def main (mode):
 ####################################################################################################
 
 ## Uncomment to run
-#run = main("")
-#pprint.pprint(run)
+run = main("")
+pprint.pprint(run)
     
