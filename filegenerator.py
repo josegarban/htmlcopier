@@ -123,11 +123,22 @@ def dict_to_simplehtml (input_dict, filename):
     # Open (or create) file
     with open (filename, "w") as myfile:                
         
-        for key in input_dict:
-            myfile.write(r"<strong>File: " + str(key) + "</strong> \n")
-            myfile.write((str(input_dict[key])[1:-1]))
+        for level1 in input_dict: # Dictionary with a list as entry
+            myfile.write("<p>--------------------------------------------------</p>")
+            #print("Level1", len(level1), type(level1))
+            #print(level1)
+            myfile.write("<p>File: <strong>" + str(level1) + "</strong> contains " +
+                         str(len(input_dict[level1])) + " tags</p>")
+            for level2 in input_dict[level1]: # Dictionary within list
+                #print("Level2", len(level2), type(level2))
+                #print(level2)
+                myfile.write("<p>----------</p>")
+                myfile.write("<p>Tag " + str(1 + input_dict[level1].index(level2)) + " </p>")
+                myfile.write("<ul><li>Tag : " + str(level2["tag"]) + "</li>") 
+                myfile.write("<li>Class : " + str(level2["class"]) + "</li></ul>")
+                myfile.write("<p></p>")
+                myfile.write(str(level2["contents"]))        
             myfile.write("<p></p>")
-            myfile.write("\n")
 
         myfile.close()    
     return None

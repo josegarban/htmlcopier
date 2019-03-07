@@ -140,4 +140,6 @@ and attibutes within a particular tag and class (optional).
     
     output_dict["outputtype"] = (outputfile, outputname)
     
+    print("")
+    
     return output_dict

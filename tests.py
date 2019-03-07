@@ -21,7 +21,7 @@ def test_find_all_classes(html_filename):
     ## Test with class
     print("\n#####################################################################################")
     print("Test to find all classes in a .html file")
-    html_string = htmlparser.file_to_string(html_filename)
+    html_string = filegenerator.file_to_string(html_filename)
 
     test = htmlparser.get_class_names(html_string)
     print(test)
@@ -31,7 +31,7 @@ def test_find_all_tags(html_filename):
     ## Test with tags
     print("\n#####################################################################################")
     print("Test to find all tags in a .html file")
-    html_string = htmlparser.file_to_string(html_filename)
+    html_string = filegenerator.file_to_string(html_filename)
     
     test = htmlparser.get_tag_names(html_string)
     print(test)
@@ -93,16 +93,16 @@ SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
                      #("website" , ""),
                      #("database", "")
                      )
-SEARCHTYPE_INPUTS = (#"Exact",
-                     "Approximate",
+SEARCHTYPE_INPUTS = ("Exact",
+                     #"Approximate",
                      #"All",
                      #"List"
                      )
 TAG_INPUTS        = (("",),
                      #("title",),
-                     #("p",),
+                     ("p",),
                      #("a",),
-                     ("title", "head")
+                     #("title", "head")
                      )
 CLASS__INPUTS     = (("",),
                      #("story",),
@@ -169,25 +169,26 @@ def test_main():
         index = test.index(condition) + 1
         print("\n\nTest", index, "/", len(test), condition)
         result = main.main(condition)
-    
+        print(type(result), len(result))
+        pprint.pprint(result)
     return None
     
 ## Uncomment to test:
-#test_main()
+test_main()
 
 ####################################################################################################
 # filegenerator.py tests
 ####################################################################################################
 
-#TEXT = "sampletest.txt"
+#TEXT    = "sampletest.txt"
 #CLASSES = "classlist.txt"
-#TAGS = "taglist.txt"
-#test = filegenerator.txt_to_list(CLASSES)
-#test = filegenerator.txt_to_list(TAGS)
+#TAGS    = "taglist.txt"
+#test    = filegenerator.txt_to_list(CLASSES)
+#test    = filegenerator.txt_to_list(TAGS)
 #print(type(test))
 
 ####################################################################################################
 # userinput.py tests
 ####################################################################################################
 
-pprint.pprint(userinput.choose_primary_mode())
+#pprint.pprint(userinput.choose_primary_mode())

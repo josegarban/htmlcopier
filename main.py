@@ -6,7 +6,6 @@ be it saved files or records from a database
 import htmlparser
 import filegenerator
 import userinput
-import pprint
 import os
 
 ####################################################################################################
