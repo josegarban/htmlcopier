@@ -3,10 +3,11 @@ import htmlparser
 import filegenerator
 import userinput
 import main
+import dbhandler
 
 ####################################################################################################
 ## Uncomment to run actual script
-#run = main("")
+#run = main.main("")
 #pprint.pprint(run)
 
 ####################################################################################################
@@ -174,7 +175,7 @@ def test_main():
     return None
     
 ## Uncomment to test:
-test_main()
+#test_main()
 
 ####################################################################################################
 # filegenerator.py tests
@@ -187,8 +188,44 @@ test_main()
 #test    = filegenerator.txt_to_list(TAGS)
 #print(type(test))
 
+
 ####################################################################################################
 # userinput.py tests
 ####################################################################################################
 
 #pprint.pprint(userinput.choose_primary_mode())
+
+
+####################################################################################################
+# dbhandler.py tests
+####################################################################################################
+
+MY_DICT = {"001": {"Name": "Maya"   , "Age": 88, "Russian": True },
+           "002": {"Name": "Ann"    , "Age": 86, "Russian": False},
+           "003": {"Name": "John"   , "Age": 90, "Russian": False},
+           "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
+           "005": {"Name": "Russell", "Age": 77, "Russian": False},
+           "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
+           "007": {"Name": "Arkady" , "Age": 71, "Russian": True },
+           }
+MY_SQLFILENAME = "martians.sqlite"
+MY_SQLTABLE    = "First_Hundred"
+
+def test_instruction_typing(input_dict):
+
+    print("Testing categorizing fields in a nested dictionary...")
+    test1 = dbhandler.dictfields_to_tuplist(input_dict)
+    print(test1)
+    test2 = dbhandler.dictfields_to_string(input_dict)
+    print(test2)
+    print("")
+    return None
+
+
+def test_manipulation(input_dict, sqlfilename, sqltable):
+    test = dbhandler.create_table(input_dict, sqlfilename, sqltable)
+    return None
+
+
+#test_instruction_typing(MY_DICT)
+#test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)

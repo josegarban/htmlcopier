@@ -14,10 +14,10 @@ def main (mode):
     """
     Input: blank, if set by user. For testing, a dictionary may be used to simulate user input.
     Objective: retrieve tags of a certain class (optional) in one or more html files
-                in a local folder or in a remote location.                
+                in a local folder or in a remote location.
+                Creates a html file consisting of just those tags. No css styles will be copied.
     Output:
-        Current: a dictionary with attributes to be converted to an html file
-        Goal: an html file consisting of just those tags. No styles will be copied.
+        Current: a dictionary with attributes to be converted to an html file.
     """
     results = {}
     if mode == "": mode = userinput.choose_primary_mode() # Usual state of affairs
@@ -63,7 +63,7 @@ def main (mode):
     # Prepare the output file
     timestamp = filegenerator.generate_longtimestamp()
 
-    if  mode["outputtype"][0] == ".html":
+    if  mode["outputtype"][0] == "html":
         filename = mode["outputtype"][1] +"_" + timestamp + ".html"
         filegenerator.dict_to_simplehtml(results, filename)
     

@@ -211,9 +211,9 @@ def extract_all_tags_classes(html_filename):
     for tag in all_tags:
         snippet = {}
         snippet["source"] = html_filename
-        snippet["tag"] = item.name
-        snippet["class"] = item.get("class")
-        snippet["contents"] = item
+        snippet["tag"] = tag.name
+        snippet["class"] = tag.get("class")
+        snippet["contents"] = tag
         if snippet not in output_snippets: output_snippets.append(snippet)
 
     return output_snippets

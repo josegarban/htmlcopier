@@ -143,3 +143,19 @@ and attibutes within a particular tag and class (optional).
     print("")
     
     return output_dict
+
+####################################################################################################
+
+def input_filename():
+    """
+    Input: typed by user.
+    Objective: get a filename for other functions to use.
+    Output: string.
+    """
+    output_string = ""
+    
+    while output_string == "":
+        print("Please type the filename or path. Don't forget to add the extension at the end.")
+        output_string = input("")
+        
+    return output_string
