@@ -200,8 +200,8 @@ def test_main():
 # dbhandler.py tests
 ####################################################################################################
 
-MY_DICT = {"001": {"Name": "Maya"   , "Age": 88, "Russian": True },
-           "002": {"Name": "Ann"    , "Age": 86, "Russian": False},
+MY_DICT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
+           "002": {"Name": "Maya"   , "Age": 86, "Russian": False},
            "003": {"Name": "John"   , "Age": 90, "Russian": False},
            "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
            "005": {"Name": "Russell", "Age": 77, "Russian": False},
@@ -229,3 +229,4 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
 #test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
 
 dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+

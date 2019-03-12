@@ -149,10 +149,11 @@ def fill_table(input_dict, sql_filename = "", sql_table = ""):
     # Get the values in the instruction
     for outer_key in input_dict:
         value_tup  = tuple(input_dict[outer_key].values())
-            
+        
     # Execute the instruction
         my_cursor.execute(instruction, value_tup)
         print("Instruction executed: {0} in {1}.\nValues: {2}\n".format(
-            instruction, sql_filename, value_tup))
-        
+            instruction, sql_filename, value_tup))    
+
+    my_connector.commit()
     return None
