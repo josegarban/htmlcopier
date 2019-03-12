@@ -5,17 +5,9 @@ import userinput
 import main
 import dbhandler
 
-####################################################################################################
-## Uncomment to run actual script
-#run = main.main("")
-#pprint.pprint(run)
 
 ####################################################################################################
 # htmlparser.py tests
-####################################################################################################
-
-ALICE = "alice.html"
-
 ####################################################################################################
 
 def test_find_all_classes(html_filename):
@@ -28,6 +20,8 @@ def test_find_all_classes(html_filename):
     print(test)
     return None
 
+####################################################################################################
+
 def test_find_all_tags(html_filename):
     ## Test with tags
     print("\n#####################################################################################")
@@ -38,9 +32,6 @@ def test_find_all_tags(html_filename):
     print(test)
     return None
 
-## Uncomment to test:
-#test_find_all_classes(ALICE)
-#test_find_all_tags(ALICE)
 
 ####################################################################################################
 
@@ -61,6 +52,7 @@ def test_extract_tags_classes_exact(file, tag, class_):
 
     return None
 
+####################################################################################################
 
 def test_extract_tags_classes_approximate(file, tag, class_):    
     print("\n#####################################################################################")
@@ -78,10 +70,6 @@ def test_extract_tags_classes_approximate(file, tag, class_):
     test = htmlparser.extract_tags_classes_approximate(file, "", "")    
 
     return None
-
-## Uncomment to test:
-#test_extract_tags_classes_exact(ALICE,"p","story")
-#test_extract_tags_classes_approximate(ALICE,"p","tory")
 
 
 ####################################################################################################
@@ -174,26 +162,34 @@ def test_main():
         pprint.pprint(result)
     return None
     
-## Uncomment to test:
-#test_main()
 
 ####################################################################################################
 # filegenerator.py tests
 ####################################################################################################
 
-#TEXT    = "sampletest.txt"
-#CLASSES = "classlist.txt"
-#TAGS    = "taglist.txt"
-#test    = filegenerator.txt_to_list(CLASSES)
-#test    = filegenerator.txt_to_list(TAGS)
-#print(type(test))
+TEXT    = "sampletest.txt"
+CLASSES = "classlist.txt"
+TAGS    = "taglist.txt"
 
+def test_filegenerator():
+    print("""
+    TEXT    = "sampletest.txt"
+    CLASSES = "classlist.txt"
+    TAGS    = "taglist.txt"
+    """)
+    test    = filegenerator.txt_to_list(CLASSES)
+    print(type(test))
+    test    = filegenerator.txt_to_list(TAGS)
+    print(type(test))
+
+    return None
 
 ####################################################################################################
 # userinput.py tests
 ####################################################################################################
 
-#pprint.pprint(userinput.choose_primary_mode())
+def test_userinput():
+    pprint.pprint(userinput.choose_primary_mode())
 
 
 ####################################################################################################
@@ -211,22 +207,65 @@ MY_DICT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
 MY_SQLFILENAME = "martians.sqlite"
 MY_SQLTABLE    = "First_Hundred"
 
+####################################################################################################
+
 def test_instruction_typing(input_dict):
 
     print("Testing categorizing fields in a nested dictionary...")
-    test1 = dbhandler.dictfields_to_tuplist(input_dict)
+    print("The previous line should show a list of tuples describing database fields.")
+    test1 = dbhandler.dictfieldnames_to_tuplist(input_dict)
     print(test1)
+    print("")
+    
+    print("Testing categorizing fields in a nested dictionary...")
     test2 = dbhandler.dictfields_to_string(input_dict)
     print(test2)
+    print("The previous line should show a tuple of strings describing database fields.")
     print("")
+    
     return None
+
+####################################################################################################
 
 def test_manipulation(input_dict, sqlfilename, sqltable):
-    test = dbhandler.create_table(input_dict, sqlfilename, sqltable)
+    print("Testing table creation from a nested dictionary...")
+    test1 = dbhandler.create_table(input_dict, sqlfilename, sqltable)
+    print("")
+    
+    print("Testing data insertion in database...")
+    test2 = dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+    print("")
+    
     return None
 
-#test_instruction_typing(MY_DICT)
-#test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
 
-dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+####################################################################################################
+# RUN ALL TESTS
+####################################################################################################
+## Uncomment to test:
+
+## Test actual script
+#pprint.pprint(main.main(""))
+
+# htmlparser.py tests
+ALICE = "alice.html"
+#test_find_all_classes(ALICE)
+#test_find_all_tags(ALICE)
+#test_extract_tags_classes_exact(ALICE,"p","story")
+#test_extract_tags_classes_approximate(ALICE,"p","tory")
+
+# main.py tests
+#test_main()
+
+# filegenerator.py tests
+#test_filegenerator()
+
+# userinput.py tests
+#test_userinput()
+
+# dbhandler.py tests
+test_instruction_typing(MY_DICT)
+test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
+
 
