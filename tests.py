@@ -212,8 +212,8 @@ MY_SQLTABLE    = "First_Hundred"
 def test_instruction_typing(input_dict):
 
     print("Testing categorizing fields in a nested dictionary...")
-    print("The previous line should show a list of tuples describing database fields.")
     test1 = dbhandler.dictfieldnames_to_tuplist(input_dict)
+    print("The previous line should show a list of tuples describing database fields.")
     print(test1)
     print("")
     
@@ -266,6 +266,4 @@ ALICE = "alice.html"
 # dbhandler.py tests
 test_instruction_typing(MY_DICT)
 test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
-
-
 
