@@ -11,6 +11,25 @@ import userinput
 
 #dict_toinput
 
+def dictfields_to_tup(input_dict):
+    """
+    Inputs: dictionary.
+    Objective: gets fields in a dictionary and converts them to a list.
+            Supports cases when different items in a dictionary don't all have the same fields.
+    Returns: list containing fieldnames only
+    """
+    output_list = []
+    
+    # Search all inner dictionaries in a dictionary
+    for outer_key in input_dict:  # It should not matter if the dictionary contains dictionaries or a list
+        
+        for inner_key in input_dict[outer_key]:
+            fieldname = str(inner_key)        
+            if fieldname not in output_list : output_list.append(fieldname)
+    
+    return tuple(output_list)
+
+####################################################################################################
 def dictfields_to_tuplist(input_dict):
     """
     Inputs: dictionary.
@@ -55,6 +74,25 @@ def dictfields_to_string(input_dict):
     
     return output_string
 
+####################################################################################################
+
+def dictfieldnames_to_string(input_dict):
+    """
+    Inputs: dictionary.
+    Objective: gets field names in a dictionary and converts them
+                to a string representation of a list for use in SQL instructions.
+    Returns: string.
+    """
+    # Field_list is a list containing tuples of the form (fieldname, fieldtype)
+    field_list = dictfields_to_tuplist(input_dict)
+    
+    output_string = ""
+    for field_tup in field_list:
+        field_string = "{0}, ".format(field_tup[0])
+        output_string = output_string + field_string
+    output_string = "(" + output_string[:-2] + ")" # -2 to remove the last comma and space
+    
+    return output_string
 
 ####################################################################################################
 # SQL MANIPULATION 
@@ -98,22 +136,23 @@ def fill_table(input_dict, sql_filename = "", sql_table = ""):
     if sql_table    == "": sql_table = input("Insert table name:")
 
     # Open the Sqlite database we're going to use (my_cursor)
-    my_connector = sqlite3.connect(sql_filename)
-    my_cursor    = my_connector.cursor()    
+    my_connector   = sqlite3.connect(sql_filename)
+    my_cursor      = my_connector.cursor()    
 
     # Build the instruction to be executed to create the table
+    fields_list    = dictfields_to_tup(input_dict)
+    fieldnames_str = dictfieldnames_to_string(input_dict)
+    questionmarks  = "(" + (("?, ")*len(fields_list))[:-2] + ")"
+    instruction    = """INSERT OR IGNORE INTO {0} {1} VALUES {2}""".format(
+        sql_table, fieldnames_str, questionmarks)                 
 
-    fieldtups   = dictfields_to_tuplist(input_dict)
-    fieldnames  = [fieldtups[0] for x in fieldtups]
-
-    fieldstring = dictfields_to_string(input_dict)
-    qmarks      = "(" + (("?, ")*len(fieldnames))[:-2] + ")"
+    # Get the values in the instruction
     for outer_key in input_dict:
-        instruction = """INSERT OR IGNORE INTO {0} {1} VALUES {2} {3} """.format(
-            sql_table, fieldnames, qmarks, fieldnames) 
-
+        value_tup  = tuple(input_dict[outer_key].values())
+            
     # Execute the instruction
-#        my_cursor.execute(instruction)
-        print("Instruction executed: {0} in {1}.\n".format(instruction, sql_filename))    
-
+        my_cursor.execute(instruction, value_tup)
+        print("Instruction executed: {0} in {1}.\nValues: {2}\n".format(
+            instruction, sql_filename, value_tup))
+        
     return None

@@ -221,11 +221,11 @@ def test_instruction_typing(input_dict):
     print("")
     return None
 
-
 def test_manipulation(input_dict, sqlfilename, sqltable):
     test = dbhandler.create_table(input_dict, sqlfilename, sqltable)
     return None
 
-
 #test_instruction_typing(MY_DICT)
 #test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
+dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
