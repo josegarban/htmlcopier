@@ -90,7 +90,7 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
             for item in applicable_tags:
                 if item.get("class") is not None:
                     if wanted_class_ in item.get("class"):
-                        for item in all_tags:
+                        for item in applicable_tags:
                             snippet = {}
                             snippet["source"] = html_filename
                             snippet["tag"] = item.name
@@ -161,12 +161,12 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
         for tag in similar_tags:
             applicable_tags = soup.find_all(tag)
             if len(similar_tags) > 0: # Don't add empty search results
-                for tag in applicable_tags:
+                for applicable_tag in applicable_tags:
                     snippet = {}
                     snippet["source"] = html_filename
-                    snippet["tag"] = item.name
-                    snippet["class"] = item.get("class")
-                    snippet["contents"] = item
+                    snippet["tag"] = applicable_tag.name
+                    snippet["class"] = applicable_tag.get("class")
+                    snippet["contents"] = applicable_tag
                     if snippet not in output_snippets: output_snippets.append(snippet)
             print('      {0} <{1}> tags were retrieved in the file {2}.\n'.format(
                 len(output_snippets), tag, html_filename))
