@@ -71,7 +71,7 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
 
     elif wanted_classes == ("",) and wanted_tags != ("",):
         for wanted_tag in wanted_tags:
-            for item in soup.find_all(wanted_tag):
+            for any_tag in soup.find_all(wanted_tag):
                 applicable_tags = soup.find_all(wanted_tag)                        
                 for item in applicable_tags:
                     snippet = {}
