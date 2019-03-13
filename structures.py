@@ -116,3 +116,14 @@ def compare_twodictkeys(dict1, dict2, dict1name = "", dict2name = "", printinstr
     
     return (same, dict1_notin_dict2, dict2_notin_dict1)
 
+####################################################################################################
+
+def compare_twodictsfull(dict1, dict2, dict1name = "", dict2name = "", printinstructions = True):
+    """
+    Input: two dictionaries and their names (optional strings),
+            printinstructions will let some intermediate stepts to be reported on-screen.
+    Objective: comparing two dictionaries in full.
+    Output: tuple of the form (are values the same?, which keys are different, which rows are different).
+    """
+    
+    return None

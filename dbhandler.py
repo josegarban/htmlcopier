@@ -314,8 +314,11 @@ def compare_keysfull(input_dict,
     # Describe the dictionary
     structures.print_dictdescription(input_dict, printinstructions)    
 
-    # Compare the dictionary
-    actual_comparison = structures.compare_twodictkeys(input_dict, db_dict, "input dictionary", "database dictionary")
+    # Compare the dictionaries
+    actual_comparison = structures.compare_twodictkeys(input_dict,
+                                                       db_dict,
+                                                       "input dictionary",
+                                                       "database dictionary")
     
     return actual_comparison
 
@@ -343,7 +346,11 @@ def compare_rowsfull(input_dict,
     # Describe the dictionary
     structures.print_dictdescription(input_dict, printinstructions)    
 
+    # Compare the dictionaries
+    actual_comparison = structures.compare_twodictsfull(input_dict,
+                                                       db_dict,
+                                                       "input dictionary",
+                                                       "database dictionary")
     
-    
-    return (same, dictvalues_not_indb, dbvalues_not_indict)
+    return actual_comparison
 
