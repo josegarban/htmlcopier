@@ -39,16 +39,16 @@ def test_extract_tags_classes_exact(file, tag, class_):
     print("\n#####################################################################################")
     print("Testing exact tag and class extraction")
     print("\n1. Both tag and class:")
-    test = htmlparser.extract_tags_classes_exact(file, tag, class_)
+    htmlparser.extract_tags_classes_exact(file, tag, class_)
     
     print("\n2. Tag but no class:")
-    test = htmlparser.extract_tags_classes_exact(file, tag, "")
+    htmlparser.extract_tags_classes_exact(file, tag, "")
 
     print("\n3. Class but no tag:")
-    test = htmlparser.extract_tags_classes_exact(file, "", class_)
+    htmlparser.extract_tags_classes_exact(file, "", class_)
 
     print("\n4. No tag and no class:")
-    test = htmlparser.extract_tags_classes_exact(file, "", "")    
+    htmlparser.extract_tags_classes_exact(file, "", "")    
 
     return None
 
@@ -58,16 +58,16 @@ def test_extract_tags_classes_approximate(file, tag, class_):
     print("\n#####################################################################################")
     print("Testing approximate tag and class extraction")
     print("\n1. Both tag and class:")
-    test = htmlparser.extract_tags_classes_approximate(file, tag, class_)
+    htmlparser.extract_tags_classes_approximate(file, tag, class_)
     
     print("\n2. Tag but no class:")
-    test = htmlparser.extract_tags_classes_approximate(file, tag, "")
+    htmlparser.extract_tags_classes_approximate(file, tag, "")
 
     print("\n3. Class but no tag:")
-    test = htmlparser.extract_tags_classes_approximate(file, "", class_)
+    htmlparser.extract_tags_classes_approximate(file, "", class_)
 
     print("\n4. No tag and no class:")
-    test = htmlparser.extract_tags_classes_approximate(file, "", "")    
+    htmlparser.extract_tags_classes_approximate(file, "", "")    
 
     return None
 
@@ -204,6 +204,14 @@ MY_DICT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
            "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
            "007": {"Name": "Arkady" , "Age": 71, "Russian": True },
            }
+MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 0,  "Russian": True },
+              "002": {"Name": "Maya"   , "Age": 86, "Russian": False},
+              "003": {"Name": "John"   , "Age": 90, "Russian": False},
+              "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
+              "005": {"Name": "Russell", "Age": 77, "Russian": False},
+              "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
+              "009": {"Name": "Kasei"  , "Age": 25, "Russian": False},
+             }
 MY_SQLFILENAME = "martians.sqlite"
 MY_SQLTABLE    = "First_Hundred"
 
@@ -212,14 +220,12 @@ MY_SQLTABLE    = "First_Hundred"
 def test_instruction_typing(input_dict):
 
     print("Testing categorizing fields in a nested dictionary...")
-    test1 = dbhandler.dictfieldnames_to_tuplist(input_dict)
+    print(dbhandler.dictfieldnames_to_tuplist(input_dict))
     print("The previous line should show a list of tuples describing database fields.")
-    print(test1)
     print("")
     
     print("Testing categorizing fields in a nested dictionary...")
-    test2 = dbhandler.dictfields_to_string(input_dict)
-    print(test2)
+    print(dbhandler.dictfields_to_string(input_dict))
     print("The previous line should show a tuple of strings describing database fields.")
     print("")
     
@@ -229,13 +235,28 @@ def test_instruction_typing(input_dict):
 
 def test_manipulation(input_dict, sqlfilename, sqltable):
     print("Testing table creation from a nested dictionary...")
-    test1 = dbhandler.create_table(input_dict, sqlfilename, sqltable)
+    dbhandler.create_table(input_dict, sqlfilename, sqltable)
     print("")
     
     print("Testing data insertion in database...")
-    test2 = dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+    dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
     print("")
-    
+
+    print("Testing simple key comparison between a dictionary and a database created from that same dictionary...")
+    dbhandler.compare_keysonly(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
+    print("Testing simple key comparison between a dictionary and a database created from another dictionary...")
+    dbhandler.compare_keysonly(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
+
+    print("Testing full key comparison between a dictionary and a database created from that same dictionary...")
+    dbhandler.compare_keysfull(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
+    print("Testing full key comparison between a dictionary and a database created from another dictionary...")
+    dbhandler.compare_keysfull(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
+
+    #print("Testing row comparison between a dictionary and a database created from that same dictionary...")
+    #print("Testing row comparison between a dictionary and a database created from another dictionary...")
+
     return None
 
 
@@ -264,6 +285,6 @@ ALICE = "alice.html"
 #test_userinput()
 
 # dbhandler.py tests
-test_instruction_typing(MY_DICT)
+#test_instruction_typing(MY_DICT)
 test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
 

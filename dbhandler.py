@@ -4,6 +4,7 @@ Sqlite functions
 
 import sqlite3
 import userinput
+import pprint
 
 ####################################################################################################
 # INSTRUCTION CREATION 
@@ -102,6 +103,23 @@ def dictfieldnames_to_string(input_dict):
 # SQL MANIPULATION 
 ####################################################################################################
 
+def create_connector(sql_filename = ""):
+    """
+    Inputs: filename or path.
+    Objective: open the sqlite database.
+    Outputs: connector.
+    """
+
+    # Get the filename if none has been set
+    if sql_filename == "": sql_filename = userinput.input_filename()    
+
+    # Open the Sqlite database we're going to use (my_cursor)
+    my_connector = sqlite3.connect(sql_filename)
+
+    return my_connector
+
+####################################################################################################
+
 def create_table(input_dict, sql_filename = "", sql_table = ""):
     """
     Inputs: filename, table that will be updated or created, and a dictionary.
@@ -111,13 +129,10 @@ def create_table(input_dict, sql_filename = "", sql_table = ""):
     Outputs: none.
     """
 
-    # Get the filename if none has been set
-    if sql_filename == "": sql_filename = userinput.input_filename()    
-    if sql_table    == "": sql_table = input("Insert table name:")
-
-    # Open the Sqlite database we're going to use (my_cursor)
-    my_connector = sqlite3.connect(sql_filename)
-    my_cursor    = my_connector.cursor()    
+    # Open the database and get the table name if none has been set
+    my_connector = create_connector(sql_filename)
+    my_cursor    = my_connector.cursor()
+    if sql_table == "": sql_table = input("Insert table name:")
 
     # Build the instruction to be executed to create the table 
     fieldnames = dictfields_to_string(input_dict)
@@ -137,15 +152,13 @@ def fill_table(input_dict, sql_filename = "", sql_table = ""):
             The table won't be created if it already exists.
     Objective: a table in a sql table will be filled with data,
                 or edited if existing, from a dictionary.
-    Outputs: none."""
+    Outputs: none.
+    """
 
-    # Get the filename if none has been set
-    if sql_filename == "": sql_filename = userinput.input_filename()    
-    if sql_table    == "": sql_table = input("Insert table name:")
-
-    # Open the Sqlite database we're going to use (my_cursor)
-    my_connector   = sqlite3.connect(sql_filename)
-    my_cursor      = my_connector.cursor()    
+    # Open the database and get the table name if none has been set
+    my_connector = create_connector(sql_filename)
+    my_cursor    = my_connector.cursor()
+    if sql_table == "": sql_table = input("Insert table name:")
 
     # Build the instruction to be executed to create the table
     fields_list    = dictfieldnames_to_tup(input_dict)
@@ -165,9 +178,140 @@ def fill_table(input_dict, sql_filename = "", sql_table = ""):
         print("Instruction executed: {0} in {1}.\nValues: {2}\n".format(
             instruction, sql_filename, tuple(values)))    
 
+    # Commit the changes
     my_connector.commit()
     return None
 
 
 ####################################################################################################
+# FUNCTIONS TO COMPARE DICTIONARIES AND TABLES
+####################################################################################################
+
+def compare_keysonly(input_dict,
+                     sql_filename = "",
+                     sql_table = "",
+                     dbkey_column = "id",
+                     printinstructions = True):
+    """
+    Inputs: filename, table that will opened, and a dictionary.
+            The column in the database table is assumed to be called "id",
+            but this can be changed at the input level.
+            Intermediate steps are reported or not, according to printinstructions.
+    Objective: compare keys in the dictionary against values in the table.
+    Outputs: tup of the form (are values the same?, which values are different).
+    """
+
+    # Open the database and get the table name if none has been set
+    my_connector = create_connector(sql_filename)
+    my_cursor    = my_connector.cursor()
+    if sql_table == "": sql_table = input("Insert table name:")
+
+    # Build the instruction to be executed to get the keys in the database
+    instruction    = """SELECT id FROM {1}""".format(
+        dbkey_column, sql_table)                 
+
+    # Execute the instruction
+    my_cursor.execute(instruction)
+    dbvalues_tups = my_cursor.fetchall()
+    dbvalues_list = [x[0] for x in dbvalues_tups]
+    if printinstructions == True:
+        print("Instruction executed: {0} in {1}.\n{2} keys found in database: {3}\n".format(
+            instruction, sql_filename, len(dbvalues_list), dbvalues_list))    
+
+    # Get the dictionary keys
+    dictvalues_list = [x for x in input_dict.keys()]
+    if printinstructions == True:
+        print("{0} keys found in dictionary: {1}\n".format(
+            len(dictvalues_list), dictvalues_list))    
+
+    # Get what is in one list but not in the other
+    dictvalues_not_indb = [x for x in dictvalues_list if x not in dbvalues_list]
+    if printinstructions == True:
+        print("{0} keys found in dictionary but not in database: {1}\n".format(
+            len(dictvalues_not_indb), dictvalues_not_indb))    
+    dbvalues_not_indict = [x for x in dbvalues_list if x not in dictvalues_list]
+    if printinstructions == True:
+        print("{0} keys found in database but not in dictionary: {1}\n".format(
+            len(dbvalues_not_indict), dbvalues_not_indict))    
+
+    if dictvalues_not_indb == [] and dbvalues_not_indict == []: same = True
+    else: same = False
+    
+    return (same, dictvalues_not_indb, dbvalues_not_indict)
+
+####################################################################################################
+
+def compare_keysfull(input_dict,
+                     sql_filename = "",
+                     sql_table = "",
+                     dbkey_column = "id",
+                     printinstructions = True):
+    """
+    Inputs: filename, table that will opened, and a dictionary.
+            The column in the database table is assumed to be called "id",
+            but this can be changed at the input level.
+            Intermediate steps are reported or not, according to printinstructions.
+    Objective: compare keys in the dictionary against values in the table.
+            However, different values besides "id" are not compared.
+    Outputs: tup of the form (are values the same?, which values are different).
+    """
+
+    # Open the database and get the table name if none has been set
+    my_connector = create_connector(sql_filename)
+    my_cursor    = my_connector.cursor()
+    if sql_table == "": sql_table = input("Insert table name:")
+
+    # Build the instruction to be executed to get the keys in the database
+    instruction    = """SELECT * FROM {0}""".format(
+        sql_table)                 
+
+    # Execute the instruction
+    dbvalues_tups = [x for x in my_cursor.execute(instruction)]
+    db_colnames   = [x[0] for x in my_cursor.description]
+
+    #Find the index of the key (probably "id") in the database table
+    keycol_index  = db_colnames.index(dbkey_column)
+    
+    # Convert the tuples from the database into a dictionary of the form {"id" {"values": values}}
+    db_dict = {}
+    for tup in dbvalues_tups:
+        db_dict[tup[keycol_index]] = {}
+        for col in db_colnames:
+            if col != dbkey_column:
+                # key column (probably "id") is outside the inner dictionary
+                db_dict[tup[keycol_index]][col] = tup[db_colnames.index(col)]
+    
+    if printinstructions == True:
+        print("Instruction executed: {0} in {1}.\n{2} rows found in database: {3}\n".format(
+            instruction, sql_filename, len(db_dict), db_dict))    
+
+    # Get the dictionary keys
+    if printinstructions == True:
+        print("{0} rows found in dictionary: {1}\n".format(
+            len(input_dict), input_dict))    
+
+    # Get what is in one list but not in the other
+    key_comparison = compare_keysonly(input_dict, sql_filename, sql_table, dbkey_column, False)
+    dictkeys_not_indb = key_comparison[1]
+    dbkeys_not_indict = key_comparison[2]
+
+    # Get what is in one dictionary but not in the other
+    dictvalues_not_indb = {x : input_dict[x] for x in dictkeys_not_indb}
+    if printinstructions == True:
+        print("{0} rows found in dictionary but not in database:".format(
+            len(dictvalues_not_indb)))
+        pprint.pprint(dictvalues_not_indb)
+        print("")
+    dbvalues_not_indict = {x : db_dict[x] for x in dbkeys_not_indict}
+    
+    if printinstructions == True:
+        print("{0} rows found in database but not in dictionary:".format(
+            len(dbvalues_not_indict)))
+        pprint.pprint(dbvalues_not_indict)    
+        print("")
+        
+    if dictvalues_not_indb == {} and dbvalues_not_indict == {}: same = True
+    else: same = False
+    
+    return (same, dictvalues_not_indb, dbvalues_not_indict)
 
