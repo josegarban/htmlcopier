@@ -142,3 +142,22 @@ def dict_to_simplehtml (input_dict, filename):
 
         myfile.close()    
     return None
+
+
+####################################################################################################
+# OTHER FILETYPES MANIPULATION
+####################################################################################################
+
+def string_to_txt(filename, string):
+    """
+    Inputs: output filename, string.
+    Objective: converts a string to a text file.
+    Outputs: none.
+    """
+    
+    text_file = open(filename, "a")
+    text_file.write(string)
+    text_file.write("\n"*2)
+    text_file.close()
+    
+    return None
