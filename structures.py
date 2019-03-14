@@ -7,14 +7,14 @@ import pprint
 # FUNCTIONS TO DESCRIBE LISTS AND DICTIONARIES
 ####################################################################################################
 
-def print_dictdescription(input_dict, printinstructions = True):
+def print_dictdescription(input_dict, dictname = "dictionary", printinstructions = True):
     """
     Input: any dictionary
              printinstructions will let some intermediate stepts to be reported on-screen
     Objective: count the rows in the dictionary and print it.
     Returns: a string describing the dictionary.
     """
-    dictdescription_string = "{0} rows found in dictionary: {1}\n".format(len(input_dict), input_dict)
+    dictdescription_string = "{0} rows found in {1}: \n{2}\n".format(len(input_dict), dictname, input_dict)
     if printinstructions == True: print(dictdescription_string)
 
     return dictdescription_string
@@ -36,7 +36,7 @@ def getdictkeys(input_dict, name = "dictionary", printinstructions = True):
     # Get the dictionary keys
     dictvalues_list = [x for x in input_dict.keys()]
     if printinstructions == True:
-        print("{0} keys found in {1}: {2}\n".format(
+        print("{0} keys found in {1}: \n{2}\n".format(
             len(dictvalues_list), name, dictvalues_list))
 
     return dictvalues_list
@@ -54,13 +54,13 @@ def compare_twolists(list1, list2, list1name = "", list2name = "", printinstruct
     # Get what is in list1 but not in list2
     list1_notin_list2 = [x for x in list1 if x not in list2]
     if printinstructions == True:
-        print("{0} keys found in {2} but not in {3}: {1}\n".format(
+        print("{0} keys found in {2} but not in {3}: \n{1}\n".format(
             len(list1_notin_list2), list1_notin_list2, list1name, list2name))    
     
     # Get what is in list2 but not in list1
     list2_notin_list1 = [x for x in list2 if x not in list1]
     if printinstructions == True:
-        print("{0} keys found in {3} but not in {2}: {1}\n".format(
+        print("{0} keys found in {3} but not in {2}: \n{1}\n".format(
             len(list2_notin_list1), list2_notin_list1, list1name, list2name))    
 
     if list1_notin_list2 == [] and list2_notin_list1 == []: same = True
@@ -140,8 +140,8 @@ def compare_twodictsfull(dict1, dict2, dict1name = "", dict2name = "", printinst
     # Show the discrepancies in tuples
     discrepancies = {x : (dict1[x], dict2[x]) for x in union1 if union1[x] != union2[x]}
     if printinstructions == True:
-        if dict1 != "" and dict2 != "": autofill = " between dict1 and dict2"
-        else: autofill = ""
+        if dict1 == "" and dict2 == "": autofill = " between both dictionaries"
+        else: autofill = " between {0} and {1}".format(dict1name, dict2name)
         print("{0} discrepancies found{1}:".format(
             len(discrepancies), autofill))
         pprint.pprint(discrepancies)    

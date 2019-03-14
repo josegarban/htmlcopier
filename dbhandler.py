@@ -215,7 +215,7 @@ def get_alldbkeys(sql_filename = "",
     # Create and report the output
     output_list   = [x[0] for x in dbvalues_tups]
     if printinstructions == True:
-        print("Instruction executed: {0} in {1}.\n{2} keys found in database: {3}\n".format(
+        print("Instruction executed: {0} in {1}.\n{2} keys found in database: \n{3}\n".format(
             instruction, sql_filename, len(output_list), output_list))    
 
     return output_list
@@ -259,7 +259,7 @@ def get_alldbrows(sql_filename = "",
     
     # Report the output
     if printinstructions == True:
-        print("Instruction executed: {0} in {1}.\n{2} rows found in database: {3}\n".format(
+        print("Instruction executed: {0} in {1}.\n{2} rows found in database: \n{3}\n".format(
             instruction, sql_filename, len(output_dict), output_dict))    
     
     return output_dict
@@ -312,7 +312,7 @@ def compare_keysfull(input_dict,
     db_dict = get_alldbrows(sql_filename, sql_table, dbkey_column, printinstructions)
 
     # Describe the dictionary
-    structures.print_dictdescription(input_dict, printinstructions)    
+    structures.print_dictdescription(input_dict, "database dictionary", printinstructions)    
 
     # Compare the dictionaries
     actual_comparison = structures.compare_twodictkeys(input_dict,
@@ -337,14 +337,16 @@ def compare_rowsfull(input_dict,
             printinstructions will let some intermediate stepts to be reported on-screen
     Objective: compare full rows in the dictionary against values in the table.
             Values other than "id" are compared.
-    Outputs: tup of the form (are rows the same?, which rows are different).
+    Output: tuple of the form  (rows in dictionary not in database,
+                                rows in database not in dictionary,
+                                rows in both which are different).
     """
 
     # Convert the table into a dictionary to compare with input_dict
     db_dict = get_alldbrows(sql_filename, sql_table, dbkey_column, printinstructions)
 
     # Describe the dictionary
-    structures.print_dictdescription(input_dict, printinstructions)    
+    structures.print_dictdescription(input_dict, "input dictionary", printinstructions)    
 
     # Compare the dictionaries
     actual_comparison = structures.compare_twodictsfull(input_dict,
