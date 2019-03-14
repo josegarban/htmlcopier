@@ -196,7 +196,7 @@ def test_userinput():
 # dbhandler.py tests
 ####################################################################################################
 
-MY_DICT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
+MY_DICT = {"001": {"Name": "Ann"    , "Age": 0, "Russian": True },
            "002": {"Name": "Maya"   , "Age": 86, "Russian": False},
            "003": {"Name": "John"   , "Age": 90, "Russian": False},
            "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
@@ -204,7 +204,7 @@ MY_DICT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
            "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
            "007": {"Name": "Arkady" , "Age": 71, "Russian": True },
            }
-MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 0,  "Russian": True },
+MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 88,  "Russian": True },
               "002": {"Name": "Maya"   , "Age": 86, "Russian": False},
               "003": {"Name": "John"   , "Age": 90, "Russian": False},
               "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
@@ -239,7 +239,7 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
     print("")
     
     print("Testing data insertion in database...")
-    dbhandler.fill_table(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+    dbhandler.add_dbrows(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
     print("")
 
     print("Testing simple key comparison between a dictionary and a database created from that same dictionary...")
@@ -260,6 +260,8 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
     print("Testing row comparison between a dictionary and a database created from another dictionary...")
     dbhandler.compare_rowsfull(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
 
+    print("Testing updating database from changes in dictionary...")
+    dbhandler.update_dict_to_db(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
     return None
 
 
@@ -290,4 +292,5 @@ ALICE = "alice.html"
 # dbhandler.py tests
 #test_instruction_typing(MY_DICT)
 test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
 
