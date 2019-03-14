@@ -71,32 +71,29 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
 
     elif wanted_classes == ("",) and wanted_tags != ("",):
         for wanted_tag in wanted_tags:
-            for any_tag in soup.find_all(wanted_tag):
-                applicable_tags = soup.find_all(wanted_tag)                        
-                for item in applicable_tags:
-                    snippet = {}
-                    snippet["source"] = html_filename
-                    snippet["tag"] = item.name
-                    snippet["class"] = item.get("class")
-                    snippet["contents"] = item
-                    if snippet not in output_snippets: output_snippets.append(snippet)
+            applicable_tags = soup.find_all(wanted_tag)                        
+            for applicable_tag in applicable_tags:
+                snippet = {}
+                snippet["source"] = html_filename
+                snippet["tag"] = applicable_tag.name
+                snippet["class"] = applicable_tag.get("class")
+                snippet["contents"] = applicable_tag
+                if snippet not in output_snippets: output_snippets.append(snippet)
 
             print('    {0} <{1}> tags were retrieved in the file {2}.\n'.format(
                 len(output_snippets), wanted_tag, html_filename))
 
     elif wanted_classes != ("",) and wanted_tags == ("",):
+        all_tags = soup.find_all()
         for wanted_class_ in wanted_classes:
-            applicable_tags = soup.find_all(wanted_class_)                        
-            for item in applicable_tags:
-                if item.get("class") is not None:
-                    if wanted_class_ in item.get("class"):
-                        for item in applicable_tags:
-                            snippet = {}
-                            snippet["source"] = html_filename
-                            snippet["tag"] = item.name
-                            snippet["class"] = item.get("class")
-                            snippet["contents"] = item
-                            if snippet not in output_snippets: output_snippets.append(snippet)
+            for any_tag in all_tags:
+                if any_tag.get("class") is not None and wanted_class_ in any_tag.get("class"):
+                    snippet = {}
+                    snippet["source"] = html_filename
+                    snippet["tag"] = any_tag.name
+                    snippet["class"] = any_tag.get("class")
+                    snippet["contents"] = any_tag
+                    if snippet not in output_snippets: output_snippets.append(snippet)
 
             print('    {0} tags with the class "{1}" were retrieved in the file {2}.\n'.format(
                 len(output_snippets), wanted_class_, html_filename)) #### Show this only once
