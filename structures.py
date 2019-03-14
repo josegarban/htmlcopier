@@ -1,6 +1,7 @@
 """
 Functions to handle data structures (dictionaries, tuples or lists)"
 """
+import pprint
 
 ####################################################################################################
 # FUNCTIONS TO DESCRIBE LISTS AND DICTIONARIES
@@ -113,7 +114,7 @@ def compare_twodictkeys(dict1, dict2, dict1name = "", dict2name = "", printinstr
         
     if dict1_notin_dict2 == {} and dict2_notin_dict1 == {}: same = True
     else: same = False
-    
+        
     return (same, dict1_notin_dict2, dict2_notin_dict1)
 
 ####################################################################################################
@@ -123,7 +124,28 @@ def compare_twodictsfull(dict1, dict2, dict1name = "", dict2name = "", printinst
     Input: two dictionaries and their names (optional strings),
             printinstructions will let some intermediate stepts to be reported on-screen.
     Objective: comparing two dictionaries in full.
-    Output: tuple of the form (are values the same?, which keys are different, which rows are different).
+    Output: tuple of the form  (rows in dict1 not in dict2,
+                                rows in dict2 not in dict1,
+                                rows in both which are different).
     """
+    # This line will print a comparison between both
+    key_comparison = compare_twodictkeys(dict1, dict2, dict1name, dict2name, printinstructions)
+    # Keys in dict1 but not in dict2: key_comparison[1]
+    # Keys in dict2 but not in dict1: key_comparison[2]
     
-    return None
+    # Get what is in both dictionaries in the keys present in both dictionaries
+    union1 = {x : dict1[x] for x in dict1 if x not in key_comparison[1] } 
+    union2 = {x : dict2[x] for x in dict2 if x not in key_comparison[2] }
+
+    # Show the discrepancies in tuples
+    discrepancies = {x : (dict1[x], dict2[x]) for x in union1 if union1[x] != union2[x]}
+    if printinstructions == True:
+        if dict1 != "" and dict2 != "": autofill = " between dict1 and dict2"
+        else: autofill = ""
+        print("{0} discrepancies found{1}:".format(
+            len(discrepancies), autofill))
+        pprint.pprint(discrepancies)    
+        print("")
+        
+    return (key_comparison[1], key_comparison[2], discrepancies)
+    

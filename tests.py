@@ -210,7 +210,7 @@ MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 0,  "Russian": True },
               "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
               "005": {"Name": "Russell", "Age": 77, "Russian": False},
               "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
-              "009": {"Name": "Kasei"  , "Age": 25, "Russian": False},
+              "008": {"Name": "Kasei"  , "Age": 25, "Russian": False},
              }
 MY_SQLFILENAME = "martians.sqlite"
 MY_SQLTABLE    = "First_Hundred"
@@ -254,8 +254,11 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
     print("Testing full key comparison between a dictionary and a database created from another dictionary...")
     dbhandler.compare_keysfull(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
 
-    #print("Testing row comparison between a dictionary and a database created from that same dictionary...")
-    #print("Testing row comparison between a dictionary and a database created from another dictionary...")
+    print("Testing row comparison between a dictionary and a database created from that same dictionary...")
+    dbhandler.compare_rowsfull(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+
+    print("Testing row comparison between a dictionary and a database created from another dictionary...")
+    dbhandler.compare_rowsfull(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
 
     return None
 
