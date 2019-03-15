@@ -115,8 +115,8 @@ and attibutes within a particular tag and class (optional).
         print("\nHow should the output be produced?")
         print("1. .html file.")
         print("2. .pdf file.")
-        print("3. Current .sqlite database.")
-        print("4. Fresh .sqlite database.")
+        print("3. Update current .sqlite database.")
+        print("4. Create a fresh .sqlite database.")
         outputtype = input("Type your choice. ")
         
     if  outputtype == "1":
@@ -130,12 +130,11 @@ and attibutes within a particular tag and class (optional).
 
     elif outputtype == "3":
         outputfile = "current.sqlite"
-        print(".sqlite output not available yet!")
-        #outputname = input("Insert filename or path without the .sqlite extension")
+        print("Insert filename or path without the .sqlite extension")
+        outputname = input_filename()
 
     elif outputtype == "4":
         outputfile = "fresh.sqlite"
-        print(".sqlite output not available yet!")
         outputname = "output"
     
     output_dict["outputtype"] = (outputfile, outputname)

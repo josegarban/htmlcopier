@@ -6,7 +6,10 @@ be it saved files or records from a database
 import htmlparser
 import filegenerator
 import userinput
+import dbhandler
+import structures
 import os
+import pprint
 
 ####################################################################################################
 
@@ -64,13 +67,22 @@ def main (mode):
     timestamp = filegenerator.generate_longtimestamp()
 
     if  mode["outputtype"][0] == "html":
-        filename = mode["outputtype"][1] +"_" + timestamp + ".html"
+        filename = mode["outputtype"][1] + "_" + timestamp + ".html"
         filegenerator.dict_to_simplehtml(results, filename)
     
-    """
-        Next steps:
-        for the sql version probably a dictionary with "a/link-to" attributes is needed
-    """
+    if  mode["outputtype"][0] == "current.sqlite":
+        filename = mode["outputtype"][1]
+        results_mod = dbhandler.flatten_dictdictdict(dictlist_to_dictdict(results))
+        dbhandler.update_dict_to_db(results_mod, filename, "Processed_html_files", "id", True)
+
+    if  mode["outputtype"][0] == "fresh.sqlite":
+        filename = mode["outputtype"][1] + "_" + filegenerator.generate_timestamp() + ".sqlite" 
+        results_mod = structures.flatten_dictdictdict(structures.dictlist_to_dictdict(results))
+        print("#"*100)
+        pprint.pprint(results_mod)
+        print("#"*100)
+        dbhandler.create_table(results_mod, filename, "Processed_html_files", True)        
+        dbhandler.add_dbrows(results_mod, filename, "Processed_html_files", "id", True)
 
     return results
 

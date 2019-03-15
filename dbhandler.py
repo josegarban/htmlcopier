@@ -42,6 +42,11 @@ def dictfieldnames_to_tuplist(input_dict):
             elif type(input_dict[outer_key][inner_key]) is str  : fieldtype = "TEXT"
             elif type(input_dict[outer_key][inner_key]) is bool : fieldtype = "BINARY"
             elif type(input_dict[outer_key][inner_key]) is float: fieldtype = "REAL"
+            # No plans to fully use RMDB at the moment, other data types will be converted to text
+            elif type(input_dict[outer_key][inner_key]) is list : fieldtype = "TEXT"
+            elif type(input_dict[outer_key][inner_key]) is tuple: fieldtype = "TEXT"
+            elif type(input_dict[outer_key][inner_key]) is dict : fieldtype = "TEXT"
+            else : fieldtype = "TEXT"
         
             if   (fieldname, fieldtype) not in output_list : output_list.append((fieldname, fieldtype))
     
@@ -124,10 +129,11 @@ def create_connector(sql_filename = ""):
 # ADDING TABLES
 ####################################################################################################
 
-def create_table(input_dict, sql_filename = "", sql_table = ""):
+def create_table(input_dict, sql_filename = "", sql_table = "", printinstructions = True):
     """
     Inputs: filename, table that will be updated or created, and a dictionary.
             The table won't be created if it already exists.
+            printinstructions will let some intermediate stepts to be reported on-screen
     Objective: a table in a sql table will be created but not filled with data,
             based on the dictionary.
     Outputs: none.
@@ -144,7 +150,7 @@ def create_table(input_dict, sql_filename = "", sql_table = ""):
     
     # Create the table
     my_cursor.execute(instruction)
-    print("Instruction executed:", instruction)
+    if printinstructions == True: print("Instruction executed:", instruction)
 
     return None
     
@@ -358,15 +364,15 @@ def add_dbrows(input_dict,
             values.append(value)
         
     # Execute the instruction
-        my_cursor.execute(instruction, tuple(values))
         row_string = "Instruction executed: {0} in table {1} in {2}.\nValues: {3}\n".format(
             instruction, sql_table, sql_filename, tuple(values))
+        if printinstructions == True: print(row_string)
+        my_cursor.execute(instruction, tuple(values))
         output_string = output_string + row_string
         
     # Commit and report the changes
     my_connector.commit()
     my_connector.close()
-    if printinstructions == True: print(output_string)
     
     return output_string
 

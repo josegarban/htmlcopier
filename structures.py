@@ -184,7 +184,7 @@ def dictlist_to_dictdict(input_dict):
 
 ####################################################################################################
 
-def flatten_dictdictdict(input_dict, additional_field = "original key"):
+def flatten_dictdictdict(input_dict, additional_field = "original_key"):
     """
     Input:
         nested data structure of the form dictionary → dictionary → dictionary
@@ -198,12 +198,21 @@ def flatten_dictdictdict(input_dict, additional_field = "original key"):
     # Add the outermost_key in the inner_dict again
     for outermost_key in input_dict:
         for outer_key in input_dict[outermost_key]:
-            print(input_dict[outermost_key][outer_key])
             input_dict[outermost_key][outer_key][additional_field] = outermost_key
 
     # Populate the output_dict
-    for outermost_key in input_dict:
+    outermost_keys = list(input_dict.keys())
+    for outermost_key in outermost_keys:
         for outer_key in input_dict[outermost_key]:
-            output_dict[outer_key] = input_dict[outermost_key][outer_key]
+            if outermost_keys.index(outermost_key) > 0:
+                # A new absolute key is created where the previous keys are counted
+                try: # If the key is a number this will work 
+                    absolute_outer_key = outer_key + \
+                                     len(input_dict[outermost_keys[outermost_keys.index(outermost_key) - 1]])
+                except:
+                    pass
+            else: # If the key is text OR we are just starting (key = 0)
+                absolute_outer_key = outer_key
+            output_dict[absolute_outer_key] = input_dict[outermost_key][outer_key]
             
     return output_dict

@@ -84,24 +84,24 @@ SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
                      )
 SEARCHTYPE_INPUTS = (#"Exact",
                      #"Approximate",
-                     #"All",
-                     "List"
+                     "All",
+                     #"List"
                      )
 TAG_INPUTS        = (("",),
-                     ("title",),
-                     ("p",),
+                     #("title",),
+                     #("p",),
                      #("a",),
                      #("title", "head")
                      )
 CLASS__INPUTS     = (("",),
                      #("story",),
                      #("tory",),
-                     ("story", "tory"),
+                     #("story", "tory"),
                      )
-OUTPUTTYPE_INPUTS = ((".html", "output"),
+OUTPUTTYPE_INPUTS = (#(".html", "output"),
                      #(".pdf", "output"),
                      #("current.sqlite", "output.sqlite"),
-                     #("fresh.sqlite", "output"),
+                     ("fresh.sqlite", "output"),
                      )
 
 # Simulated user input through the generation of several dictionaries
@@ -216,21 +216,21 @@ MY_SQLFILENAME = "martians.sqlite"
 MY_SQLTABLE    = "First_Hundred"
 
 HTMLDICT = {'alice - Copie.html': [{'class': ['story'],
-                         'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
-                         'source': 'C:\\Temp\\alice - Copie.html',
-                         'tag': 'p'},
-                        {'class': ['story'],
-                         'contents': '<p class="story">...</p>',
-                         'source': 'C:\\Temp\\alice - Copie.html',
-                         'tag': 'p'}],
- 'alice.html': [{'class': ['story'],
-                 'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
-                 'source': 'C:\\Temp\\alice.html',
-                 'tag': 'p'},
-                {'class': ['story'],
-                 'contents': '<p class="story">...</p>',
-                 'source': 'C:\\Temp\\alice.html',
-                 'tag': 'p'}]}
+                                     'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
+                                     'source': 'C:\\Temp\\alice - Copie.html',
+                                     'tag': 'p'},
+                                    {'class': ['story'],
+                                     'contents': '<p class="story">...</p>',
+                                     'source': 'C:\\Temp\\alice - Copie.html',
+                                     'tag': 'p'}],
+                     'alice.html': [{'class': ['story'],
+                                     'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
+                                     'source': 'C:\\Temp\\alice.html',
+                                     'tag': 'p'},
+                                    {'class': ['story'],
+                                     'contents': '<p class="story">...</p>',
+                                     'source': 'C:\\Temp\\alice.html',
+                                     'tag': 'p'}]}
 
 ####################################################################################################
 
@@ -283,6 +283,7 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
     return None
 
 ####################################################################################################
+
 def test_structures(input_dict):
     
     print("Testing conversion of a structure of the form dictionary → list to dictionary → dictionary")
@@ -313,7 +314,7 @@ ALICE = "alice.html"
 #test_extract_tags_classes_approximate(ALICE,"p","tory")
 
 # main.py tests
-#test_main()
+test_main()
 
 # filegenerator.py tests
 #test_filegenerator()
@@ -326,4 +327,4 @@ ALICE = "alice.html"
 #test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
 
 # structures.py tests
-test_structures(HTMLDICT)
+#test_structures(HTMLDICT)

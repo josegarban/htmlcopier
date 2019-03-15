@@ -62,8 +62,11 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
                     snippet = {}
                     snippet["source"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = item.get("class")
-                    snippet["contents"] = item
+                    snippet["class"] = str(item.get("class"))
+                    snippet["contents"] = str(item)
+                    
+                    # No plans to fully use RMDB yet, various data types will be converted to text
+
                     if snippet not in output_snippets: output_snippets.append(snippet)
 
                 print('    {0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
@@ -72,12 +75,15 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
     elif wanted_classes == ("",) and wanted_tags != ("",):
         for wanted_tag in wanted_tags:
             applicable_tags = soup.find_all(wanted_tag)                        
-            for applicable_tag in applicable_tags:
+            for item in applicable_tags:
                 snippet = {}
                 snippet["source"] = html_filename
-                snippet["tag"] = applicable_tag.name
-                snippet["class"] = applicable_tag.get("class")
-                snippet["contents"] = applicable_tag
+                snippet["tag"] = item.name
+                snippet["class"] = str(item.get("class"))
+                snippet["contents"] = str(item)
+                
+                # No plans to fully use RMDB yet, various data types will be converted to text
+                   
                 if snippet not in output_snippets: output_snippets.append(snippet)
 
             print('    {0} <{1}> tags were retrieved in the file {2}.\n'.format(
@@ -86,13 +92,16 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
     elif wanted_classes != ("",) and wanted_tags == ("",):
         all_tags = soup.find_all()
         for wanted_class_ in wanted_classes:
-            for any_tag in all_tags:
-                if any_tag.get("class") is not None and wanted_class_ in any_tag.get("class"):
+            for item in all_tags:
+                if item.get("class") is not None and wanted_class_ in item.get("class"):
                     snippet = {}
                     snippet["source"] = html_filename
-                    snippet["tag"] = any_tag.name
-                    snippet["class"] = any_tag.get("class")
-                    snippet["contents"] = any_tag
+                    snippet["tag"] = item.name
+                    snippet["class"] = str(item.get("class"))
+                    snippet["contents"] = str(item)
+                    
+                    # No plans to fully use RMDB yet, various data types will be converted to text
+
                     if snippet not in output_snippets: output_snippets.append(snippet)
 
             print('    {0} tags with the class "{1}" were retrieved in the file {2}.\n'.format(
@@ -148,8 +157,11 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
                             snippet = {}
                             snippet["source"] = html_filename
                             snippet["tag"] = item.name
-                            snippet["class"] = item.get("class")
-                            snippet["contents"] = item
+                            snippet["class"] = str(item.get("class"))
+                            snippet["contents"] = str(item)
+                            
+                            # No plans to fully use RMDB yet, various data types will be converted to text
+                    
                             if snippet not in output_snippets: output_snippets.append(snippet)
                 print('      {0} <{1}> tags with the class "{2}" were retrieved in the file {3}.\n'.format(
                     len(output_snippets), similar_tag, similar_class_, html_filename))
@@ -158,12 +170,15 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
         for tag in similar_tags:
             applicable_tags = soup.find_all(tag)
             if len(similar_tags) > 0: # Don't add empty search results
-                for applicable_tag in applicable_tags:
+                for item in applicable_tags:
                     snippet = {}
                     snippet["source"] = html_filename
-                    snippet["tag"] = applicable_tag.name
-                    snippet["class"] = applicable_tag.get("class")
-                    snippet["contents"] = applicable_tag
+                    snippet["tag"] = item.name
+                    snippet["class"] = str(item.get("class"))
+                    snippet["contents"] = str(item)
+                    
+                    # No plans to fully use RMDB yet, various data types will be converted to text
+                    
                     if snippet not in output_snippets: output_snippets.append(snippet)
             print('      {0} <{1}> tags were retrieved in the file {2}.\n'.format(
                 len(output_snippets), tag, html_filename))
@@ -176,8 +191,11 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
                     snippet = {}
                     snippet["source"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = item.get("class")
-                    snippet["contents"] = item
+                    snippet["class"] = str(item.get("class"))
+                    snippet["contents"] = str(item)
+                    
+                    # No plans to fully use RMDB yet, various data types will be converted to text
+
                     if snippet not in output_snippets: output_snippets.append(snippet)
             
             print('      {0} tags with class "{1}" were retrieved in the file {2}.\n'.format(
@@ -209,8 +227,11 @@ def extract_all_tags_classes(html_filename):
         snippet = {}
         snippet["source"] = html_filename
         snippet["tag"] = tag.name
-        snippet["class"] = tag.get("class")
-        snippet["contents"] = tag
+        snippet["class"] = str(tag.get("class"))
+        snippet["contents"] = str(tag)
+        
+        # No plans to fully use RMDB yet, various data types will be converted to text
+
         if snippet not in output_snippets: output_snippets.append(snippet)
 
     return output_snippets
