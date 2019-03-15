@@ -4,7 +4,7 @@ import filegenerator
 import userinput
 import main
 import dbhandler
-
+import structures
 
 ####################################################################################################
 # htmlparser.py tests
@@ -82,13 +82,13 @@ SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
                      #("website" , ""),
                      #("database", "")
                      )
-SEARCHTYPE_INPUTS = ("Exact",
+SEARCHTYPE_INPUTS = (#"Exact",
                      #"Approximate",
                      #"All",
-                     #"List"
+                     "List"
                      )
 TAG_INPUTS        = (("",),
-                     #("title",),
+                     ("title",),
                      ("p",),
                      #("a",),
                      #("title", "head")
@@ -204,7 +204,7 @@ MY_DICT = {"001": {"Name": "Ann"    , "Age": 0, "Russian": True },
            "006": {"Name": "Hiroko" , "Age": 60, "Russian": False},
            "007": {"Name": "Arkady" , "Age": 71, "Russian": True },
            }
-MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 88,  "Russian": True },
+MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 88, "Russian": True },
               "002": {"Name": "Maya"   , "Age": 86, "Russian": False},
               "003": {"Name": "John"   , "Age": 90, "Russian": False},
               "004": {"Name": "Nadia"  , "Age": 87, "Russian": True },
@@ -214,6 +214,23 @@ MY_DICTALT = {"001": {"Name": "Ann"    , "Age": 88,  "Russian": True },
              }
 MY_SQLFILENAME = "martians.sqlite"
 MY_SQLTABLE    = "First_Hundred"
+
+HTMLDICT = {'alice - Copie.html': [{'class': ['story'],
+                         'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
+                         'source': 'C:\\Temp\\alice - Copie.html',
+                         'tag': 'p'},
+                        {'class': ['story'],
+                         'contents': '<p class="story">...</p>',
+                         'source': 'C:\\Temp\\alice - Copie.html',
+                         'tag': 'p'}],
+ 'alice.html': [{'class': ['story'],
+                 'contents': '<p class="story">Once upon a time there were three little sisters; and their names were    <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,    <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and    <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;    and they lived at the bottom of a well.</p>',
+                 'source': 'C:\\Temp\\alice.html',
+                 'tag': 'p'},
+                {'class': ['story'],
+                 'contents': '<p class="story">...</p>',
+                 'source': 'C:\\Temp\\alice.html',
+                 'tag': 'p'}]}
 
 ####################################################################################################
 
@@ -262,8 +279,23 @@ def test_manipulation(input_dict, sqlfilename, sqltable):
 
     print("Testing updating database from changes in dictionary...")
     dbhandler.update_dict_to_db(MY_DICTALT, MY_SQLFILENAME, MY_SQLTABLE)
+    
     return None
 
+####################################################################################################
+def test_structures(input_dict):
+    
+    print("Testing conversion of a structure of the form dictionary → list to dictionary → dictionary")
+    converted = structures.dictlist_to_dictdict(input_dict)
+    pprint.pprint(converted)
+    print("")
+    
+    print("Flattening a structure of the form dictionary → dictionary → dictionary to dictionary → dictionary")
+    flattened = structures.flatten_dictdictdict(converted)
+    pprint.pprint(flattened)
+    print("")
+    
+    return None
 
 ####################################################################################################
 # RUN ALL TESTS
@@ -291,6 +323,7 @@ ALICE = "alice.html"
 
 # dbhandler.py tests
 #test_instruction_typing(MY_DICT)
-test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
+#test_manipulation(MY_DICT, MY_SQLFILENAME, MY_SQLTABLE)
 
-
+# structures.py tests
+test_structures(HTMLDICT)

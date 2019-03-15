@@ -148,4 +148,62 @@ def compare_twodictsfull(dict1, dict2, dict1name = "", dict2name = "", printinst
         print("")
         
     return (key_comparison[1], key_comparison[2], discrepancies)
+
+####################################################################################################
+# FUNCTIONS TO MODIFY HOW DATA STRUCTURES ARE STRUCTURED
+####################################################################################################
+
+def dictlist_to_dictdict(input_dict):
+    """
+    Input: nested data structure of the form dictionary → list
+    Objective: change inner lists into dictionaries.
+    Output: nested data structure of the form dictionary → dictionary.
+            The key in the middle dictionary is a string of the item index within the original list.
+    """
+    output_dict = {}
     
+    input_dict_keys = list(input_dict.keys())
+
+    if type(input_dict[input_dict_keys[0]]) is list:
+        for key in input_dict_keys:
+            # The same outer key will be kept but the item will be a dictionary instead of a list
+            output_dict[key] = {}
+            
+            for row in input_dict[key]:
+                # The new inner key will be the row index within the original list
+                index = input_dict[key].index(row)
+                output_dict[key][index] = row
+    else:
+        print("""
+    Item could not be converted from the form dictionary → list
+                                  to the form dictionary → dictionary. 
+        """)
+        output_dict = input_dict
+    
+    return output_dict
+
+####################################################################################################
+
+def flatten_dictdictdict(input_dict, additional_field = "original key"):
+    """
+    Input:
+        nested data structure of the form dictionary → dictionary → dictionary
+        the name that will be 
+    Objective: the outermost dictionary key will be turned into a field in the innermost dictionary.
+    Output: nested data structure of the form dictionary → dictionary, where
+            the inner dictionary will have an additional field.
+    """
+    output_dict = {}
+    
+    # Add the outermost_key in the inner_dict again
+    for outermost_key in input_dict:
+        for outer_key in input_dict[outermost_key]:
+            print(input_dict[outermost_key][outer_key])
+            input_dict[outermost_key][outer_key][additional_field] = outermost_key
+
+    # Populate the output_dict
+    for outermost_key in input_dict:
+        for outer_key in input_dict[outermost_key]:
+            output_dict[outer_key] = input_dict[outermost_key][outer_key]
+            
+    return output_dict
