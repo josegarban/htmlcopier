@@ -60,10 +60,13 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
                 applicable_tags = soup.find_all(wanted_tag, wanted_class_)                        
                 for item in applicable_tags:
                     snippet = {}
-                    snippet["source"] = html_filename
+                    snippet["given_path"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = str(item.get("class"))
+                    if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                    else: snippet["class"] = None
                     snippet["contents"] = str(item)
+                    if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                    else: snippet["href"] = None
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
 
@@ -77,10 +80,13 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
             applicable_tags = soup.find_all(wanted_tag)                        
             for item in applicable_tags:
                 snippet = {}
-                snippet["source"] = html_filename
+                snippet["given_path"] = html_filename
                 snippet["tag"] = item.name
-                snippet["class"] = str(item.get("class"))
+                if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                else: snippet["class"] = None
                 snippet["contents"] = str(item)
+                if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                else: snippet["href"] = None
                 
                 # No plans to fully use RMDB yet, various data types will be converted to text
                    
@@ -95,10 +101,13 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
             for item in all_tags:
                 if item.get("class") is not None and wanted_class_ in item.get("class"):
                     snippet = {}
-                    snippet["source"] = html_filename
+                    snippet["given_path"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = str(item.get("class"))
+                    if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                    else: snippet["class"] = None
                     snippet["contents"] = str(item)
+                    if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                    else: snippet["href"] = None
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
 
@@ -155,10 +164,13 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
                     if len(similar_classes) > 0:
                         for item in applicable_tags:
                             snippet = {}
-                            snippet["source"] = html_filename
+                            snippet["given_path"] = html_filename
                             snippet["tag"] = item.name
-                            snippet["class"] = str(item.get("class"))
+                            if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                            else: snippet["class"] = None
                             snippet["contents"] = str(item)
+                            if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                            else: snippet["href"] = None
                             
                             # No plans to fully use RMDB yet, various data types will be converted to text
                     
@@ -172,10 +184,13 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
             if len(similar_tags) > 0: # Don't add empty search results
                 for item in applicable_tags:
                     snippet = {}
-                    snippet["source"] = html_filename
+                    snippet["given_path"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = str(item.get("class"))
+                    if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                    else: snippet["class"] = None
                     snippet["contents"] = str(item)
+                    if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                    else: snippet["href"] = None
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
                     
@@ -189,10 +204,13 @@ def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes)
             if len(similar_classes) > 0:
                 for item in applicable_tags:
                     snippet = {}
-                    snippet["source"] = html_filename
+                    snippet["given_path"] = html_filename
                     snippet["tag"] = item.name
-                    snippet["class"] = str(item.get("class"))
+                    if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+                    else: snippet["class"] = None
                     snippet["contents"] = str(item)
+                    if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+                    else: snippet["href"] = None
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
 
@@ -223,12 +241,15 @@ def extract_all_tags_classes(html_filename):
     print('      {0} tags of all types and classes were retrieved in the file {1}.'.format(
         len(all_tags), html_filename))
 
-    for tag in all_tags:
+    for item in all_tags:
         snippet = {}
-        snippet["source"] = html_filename
-        snippet["tag"] = tag.name
-        snippet["class"] = str(tag.get("class"))
-        snippet["contents"] = str(tag)
+        snippet["given_path"] = html_filename
+        snippet["tag"] = item.name
+        if item.get("class") is not None: snippet["class"] = str(item.get("class"))
+        else: snippet["class"] = None
+        snippet["contents"] = str(item)
+        if item.get("href") is not None: snippet["href"] = str(item.get("href"))
+        else: snippet["href"] = None
         
         # No plans to fully use RMDB yet, various data types will be converted to text
 

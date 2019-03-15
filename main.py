@@ -72,12 +72,12 @@ def main (mode):
     
     if  mode["outputtype"][0] == "current.sqlite":
         filename = mode["outputtype"][1]
-        results_mod = dbhandler.flatten_dictdictdict(dictlist_to_dictdict(results))
+        results_mod = dbhandler.flatten_dictdictdict(dictlist_to_dictdict(results), "filename")
         dbhandler.update_dict_to_db(results_mod, filename, "Processed_html_files", "id", True)
 
     if  mode["outputtype"][0] == "fresh.sqlite":
         filename = mode["outputtype"][1] + "_" + filegenerator.generate_timestamp() + ".sqlite" 
-        results_mod = structures.flatten_dictdictdict(structures.dictlist_to_dictdict(results))
+        results_mod = structures.flatten_dictdictdict(structures.dictlist_to_dictdict(results), "filename")
         print("#"*100)
         pprint.pprint(results_mod)
         print("#"*100)
