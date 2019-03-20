@@ -120,7 +120,7 @@ and attibutes within a particular tag and class (optional).
         outputtype = input("Type your choice. ")
         
     if  outputtype == "1":
-        outputfile = "html"
+        outputfile = ".html"
         outputname = "output"
          
     elif outputtype == "2":
