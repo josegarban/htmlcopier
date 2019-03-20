@@ -76,9 +76,10 @@ def txt_to_list(filename):
     with open(filename, "r") as my_file:
         for line in my_file:
             line = line.rstrip()
-            output_list.append(line)
+            output_list.append(str(line))
             print("    Line {0}: {1}".format(output_list.index(line), line), "")
-    
+
+    if len(output_list) == 0: output_list = [""] # In case the file is empty we want a list, not a set
     return output_list
 
 ####################################################################################################

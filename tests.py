@@ -305,6 +305,7 @@ def test_structures(input_dict):
 
 ## Test actual script
 #pprint.pprint(main.main(""))
+main.main("")
 
 # htmlparser.py tests
 ALICE = "alice.html"
@@ -314,7 +315,7 @@ ALICE = "alice.html"
 #test_extract_tags_classes_approximate(ALICE,"p","tory")
 
 # main.py tests
-test_main()
+#test_main()
 
 # filegenerator.py tests
 #test_filegenerator()

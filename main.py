@@ -55,6 +55,10 @@ def main (mode):
             results[file] = htmlparser.extract_tags_classes_approximate(
                 absolute_file_location, mode["tag"], mode["class_"])
     
+        elif mode ["searchtype"] == "List":
+            results[file] = htmlparser.extract_tags_classes_approximate(
+                absolute_file_location, mode["tag"], mode["class_"])
+
         elif mode ["searchtype"] == "All":
             results[file] = htmlparser.extract_all_tags_classes(
                 absolute_file_location)

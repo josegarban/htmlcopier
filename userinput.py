@@ -107,7 +107,7 @@ and attibutes within a particular tag and class (optional).
             while ".txt" not in classfile:
                 print("\nWhat is the name of the .txt file where the classes are?")
                 classfile = input('Your input must end in .txt. A full path is also valid.\n')
-            class__tuple   = tuple(filegenerator.txt_to_list(classfile))
+            class__tuple  = tuple(filegenerator.txt_to_list(classfile))
     output_dict["class_"] = class__tuple
     
     # Output generation
