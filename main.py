@@ -49,7 +49,7 @@ def main (mode):
             
         if   mode ["searchtype"] == "Exact":
             results[file] = htmlparser.extract_tags_classes_exact(
-                absolute_file_location, mode["tag"], mode["class_"])
+                absolute_file_location, mode["tag"], mode["class_"], htmlfiles.index(file))
     
         elif mode ["searchtype"] == "Approximate":
             results[file] = htmlparser.extract_tags_classes_approximate(
@@ -70,7 +70,7 @@ def main (mode):
     # Prepare the output file
     timestamp = filegenerator.generate_longtimestamp()
 
-    if  mode["outputtype"][0] == "html":
+    if  mode["outputtype"][0] == ".html":
         filename = mode["outputtype"][1] + "_" + timestamp + ".html"
         filegenerator.dict_to_simplehtml(results, filename)
     
