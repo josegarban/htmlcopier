@@ -153,9 +153,11 @@ def compare_twodictsfull(dict1, dict2, dict1name = "", dict2name = "", printinst
 # FUNCTIONS TO MODIFY HOW DATA STRUCTURES ARE STRUCTURED
 ####################################################################################################
 
-def dictlist_to_dictdict(input_dict):
+def dictlist_to_dictdict(input_dict, field = ""):
     """
     Input: nested data structure of the form dictionary → list
+            if field is blank, the keys will be the rows
+            if field is not blank, the keys will be one of the fields in the inner dictionary
     Objective: change inner lists into dictionaries.
     Output: nested data structure of the form dictionary → dictionary.
             The key in the middle dictionary is a string of the item index within the original list.
@@ -171,8 +173,14 @@ def dictlist_to_dictdict(input_dict):
             
             for row in input_dict[key]:
                 # The new inner key will be the row index within the original list
-                index = input_dict[key].index(row)
-                output_dict[key][index] = row
+                if field == "":
+                    index = input_dict[key].index(row)
+                    output_dict[key][index] = row
+                # The new inner key will be one of the fields in the dictionaries within the list
+                else:
+                    index = row[field]
+                    output_dict[key][index] = row
+                
     else:
         print("""
     Item could not be converted from the form dictionary → list

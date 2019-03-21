@@ -113,19 +113,18 @@ and attibutes within a particular tag and class (optional).
     # Output generation
     while outputtype not in ("1", "2", "3", "4"):
         print("\nHow should the output be produced?")
-        print("1. .html file.")
-        print("2. .pdf file.")
+        print("1. .html report.")
+        print("2. .html abridged version of the original.")
         print("3. Update current .sqlite database.")
         print("4. Create a fresh .sqlite database.")
         outputtype = input("Type your choice. ")
         
     if  outputtype == "1":
-        outputfile = ".html"
+        outputfile = ".html report"
         outputname = "output"
          
     elif outputtype == "2":
-        outputfile  = "pdf"
-        print(".pdf output not available yet!")
+        outputfile  = "abridged"
         outputname = "output"
 
     elif outputtype == "3":

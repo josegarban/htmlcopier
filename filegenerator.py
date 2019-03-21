@@ -3,6 +3,7 @@ import os
 
 import time
 import datetime
+import structures
 
 """
 Objective: create or read files
@@ -113,7 +114,7 @@ def file_to_string (filename):
 # HTML FILE MANIPULATION
 ####################################################################################################
 
-def dict_to_simplehtml (input_dict, filename):
+def dict_to_simplehtmlreport (input_dict, filename):
     """
     Objective: open a dictionary and write it to a .html file
     Inputs:
@@ -127,13 +128,10 @@ def dict_to_simplehtml (input_dict, filename):
         
         for level1 in input_dict: # Dictionary with a list as entry
             myfile.write("<p>--------------------------------------------------</p>")
-            #print("Level1", len(level1), type(level1))
-            #print(level1)
             myfile.write("<p>File: <strong>" + str(level1) + "</strong> contains " +
                          str(len(input_dict[level1])) + " tags</p>")
+
             for level2 in input_dict[level1]: # Dictionary within list
-                #print("Level2", len(level2), type(level2))
-                #print(level2)
                 myfile.write("<p>----------</p>")
                 myfile.write("<p>Tag {0}</p>".format(
                                 str( 1 + input_dict[level1].index(level2) )))
@@ -149,6 +147,44 @@ def dict_to_simplehtml (input_dict, filename):
         myfile.close()    
     return None
 
+####################################################################################################
+
+def dict_to_simplehtmlabridged (input_dict, filename):
+    """
+    Objective: open a dictionary and write it to a .html file that will keep the original tag order
+    Inputs:
+        (1) list 
+        (2) output filename
+    """
+    print("Creating file {0}...".format(filename))
+    # Open (or create) file
+    tr_dict = structures.dictlist_to_dictdict(input_dict, "pos_index")
+    
+    with open (filename, "w") as myfile:                
+        myfile.write("<body>")
+        
+        for level1 in tr_dict: # Dictionary with a list as entry
+            myfile.write("<p>--------------------------------------------------</p>")
+            myfile.write("<p>File: <strong>" + str(level1) + "</strong> contains " +
+                         str(len(tr_dict[level1])) + " tags</p>")
+            
+            sortedkeys = sorted(list(tr_dict[level1].keys()))
+            
+            for sortedkey in sortedkeys: # Dictionary within list
+                level2 = tr_dict[level1][sortedkey]
+
+                myfile.write("<p>----------</p>")
+                myfile.write("<p>Tag {0} <strong>{1}</strong> with class(es) : <strong>{2}</strong> in file {3}.</p>".format(
+                                str( 1 + sortedkey ),
+                                str( level2["tag"] ),
+                                str( level2["class"] ),
+                                str( 1 + level2["file_index"] ) ))
+                myfile.write(str(level2["contents"]))        
+            myfile.write("<p></p>")
+        
+        myfile.write("</body>")
+        myfile.close()    
+    return None
 
 ####################################################################################################
 # OTHER FILETYPES MANIPULATION

@@ -98,7 +98,8 @@ CLASS__INPUTS     = (("",),
                      #("tory",),
                      #("story", "tory"),
                      )
-OUTPUTTYPE_INPUTS = ((".html", "output"),
+OUTPUTTYPE_INPUTS = (#(".html report", "output"),
+                      ("abridged", "output"),
                      #(".pdf", "output"),
                      #("current.sqlite", "output.sqlite"),
                      #("fresh.sqlite", "output"),
@@ -232,6 +233,70 @@ HTMLDICT = {'alice - Copie.html': [{'class': ['story'],
                                      'source': 'C:\\Temp\\alice.html',
                                      'tag': 'p'}]}
 
+HTMLDICT2 = {'alice - Copie.html': [{'class': "['title']",
+                         'contents': '<p class="title"><b>The Dormouse\'s '
+                                     'story</b></p>',
+                         'file_index': 0,
+                         'given_path': 'C:\\Temp\\alice - Copie.html',
+                         'href': None,
+                         'pos_index': 4,
+                         'tag': 'p'},
+                        {'class': "['story']",
+                         'contents': '<p class="story">Once upon a time there '
+                                     'were three little sisters; and their '
+                                     'names were    <a class="sister" '
+                                     'href="http://example.com/elsie" '
+                                     'id="link1">Elsie</a>,    <a '
+                                     'class="sister" '
+                                     'href="http://example.com/lacie" '
+                                     'id="link2">Lacie</a> and    <a '
+                                     'class="sister" '
+                                     'href="http://example.com/tillie" '
+                                     'id="link3">Tillie</a>;    and they lived '
+                                     'at the bottom of a well.</p>',
+                         'file_index': 0,
+                         'given_path': 'C:\\Temp\\alice - Copie.html',
+                         'href': None,
+                         'pos_index': 6,
+                         'tag': 'p'},
+                        {'class': "['story']",
+                         'contents': '<p class="story">...</p>',
+                         'file_index': 0,
+                         'given_path': 'C:\\Temp\\alice - Copie.html',
+                         'href': None,
+                         'pos_index': 10,
+                         'tag': 'p'}],
+ 'alice.html': [{'class': "['title']",
+                 'contents': '<p class="title"><b>The Dormouse\'s '
+                             'story</b></p>',
+                 'file_index': 1,
+                 'given_path': 'C:\\Temp\\alice.html',
+                 'href': None,
+                 'pos_index': 4,
+                 'tag': 'p'},
+                {'class': "['story']",
+                 'contents': '<p class="story">Once upon a time there were '
+                             'three little sisters; and their names were    <a '
+                             'class="sister" href="http://example.com/elsie" '
+                             'id="link1">Elsie</a>,    <a class="sister" '
+                             'href="http://example.com/lacie" '
+                             'id="link2">Lacie</a> and    <a class="sister" '
+                             'href="http://example.com/tillie" '
+                             'id="link3">Tillie</a>;    and they lived at the '
+                             'bottom of a well.</p>',
+                 'file_index': 1,
+                 'given_path': 'C:\\Temp\\alice.html',
+                 'href': None,
+                 'pos_index': 6,
+                 'tag': 'p'},
+                {'class': "['story']",
+                 'contents': '<p class="story">...</p>',
+                 'file_index': 1,
+                 'given_path': 'C:\\Temp\\alice.html',
+                 'href': None,
+                 'pos_index': 10,
+                 'tag': 'p'}]}
+
 ####################################################################################################
 
 def test_instruction_typing(input_dict):
@@ -290,7 +355,13 @@ def test_structures(input_dict):
     converted = structures.dictlist_to_dictdict(input_dict)
     pprint.pprint(converted)
     print("")
-    
+
+    print("Testing conversion of a structure of the form dictionary → list to dictionary → dictionary,")
+    print("while changing the key")
+    converted = structures.dictlist_to_dictdict(input_dict, "tag")
+    pprint.pprint(converted)
+    print("")
+
     print("Flattening a structure of the form dictionary → dictionary → dictionary to dictionary → dictionary")
     flattened = structures.flatten_dictdictdict(converted)
     pprint.pprint(flattened)
@@ -305,7 +376,7 @@ def test_structures(input_dict):
 
 ## Test actual script
 #pprint.pprint(main.main(""))
-#main.main("")
+main.main("")
 
 # htmlparser.py tests
 ALICE = "alice.html"
@@ -315,7 +386,7 @@ ALICE = "alice.html"
 #test_extract_tags_classes_approximate(ALICE,"p","tory")
 
 # main.py tests
-test_main()
+#test_main()
 
 # filegenerator.py tests
 #test_filegenerator()
@@ -329,3 +400,4 @@ test_main()
 
 # structures.py tests
 #test_structures(HTMLDICT)
+#test_structures(HTMLDICT2)

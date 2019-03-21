@@ -56,7 +56,7 @@ def main (mode):
                 absolute_file_location, mode["tag"], mode["class_"])
     
         elif mode ["searchtype"] == "List":
-            results[file] = htmlparser.extract_tags_classes_approximate(
+            results[file] = htmlparser.extract_tags_classes_exact(
                 absolute_file_location, mode["tag"], mode["class_"])
 
         elif mode ["searchtype"] == "All":
@@ -70,9 +70,13 @@ def main (mode):
     # Prepare the output file
     timestamp = filegenerator.generate_longtimestamp()
 
-    if  mode["outputtype"][0] == ".html":
+    if  mode["outputtype"][0] == ".html report":
         filename = mode["outputtype"][1] + "_" + timestamp + ".html"
-        filegenerator.dict_to_simplehtml(results, filename)
+        filegenerator.dict_to_simplehtmlreport(results, filename)
+    
+    if  mode["outputtype"][0] == "abridged":
+        filename = mode["outputtype"][1] + "_" + timestamp + ".html"
+        filegenerator.dict_to_simplehtmlabridged(results, filename)
     
     if  mode["outputtype"][0] == "current.sqlite":
         filename = mode["outputtype"][1]
