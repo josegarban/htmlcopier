@@ -20,6 +20,18 @@ def print_dictdescription(input_dict, dictname = "dictionary", printinstructions
     return dictdescription_string
 
 ####################################################################################################
+# FUNCTIONS TO CONVERT STRING REPRESENTATIONS TO DATA STRUCTURES
+####################################################################################################
+
+def str_to_simplelist(string):
+    """
+    Input: string
+    Output: list
+    """
+    string = string [1:-1].replace(" ", "").replace('"', "").replace("'", "")
+    output_list = string.split(",")
+
+    return output_list
 
 ####################################################################################################
 # FUNCTIONS TO COMPARE LISTS AND DICTIONARIES

@@ -114,6 +114,58 @@ def file_to_string (filename):
 # HTML FILE MANIPULATION
 ####################################################################################################
 
+HEAD = """
+<!DOCTYPE html>
+  <head>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+"""
+####################################################################################################
+
+def htmldict_to_css (input_dict, filename):
+    """
+    Objective: open a dictionary and write it to a .html file that will keep the original tag order
+    Inputs:
+        (1) list 
+        (2) output filename
+    """
+    # Open (or create) file
+    filename = filename.replace(".html", ".css")
+    print("Creating file {0}...".format(filename))
+
+    # Find tags, classes, and their existing combinations
+    doc_classes = []
+    doc_tags = []
+    doc_classtags = []
+    
+    for level1 in input_dict: # Dictionary with a list as entry
+        for level2 in input_dict[level1]: # Dictionary within list
+            tag = str(level2["tag"])
+            doc_tags.append(tag)
+
+            if level2["class"] is not None:
+                class_ = structures.str_to_simplelist(str(level2["class"]))
+                for item in class_:
+                    if item is not None:
+                        doc_classes.append(item)
+                        if tag is not None:
+                            doc_classtags.append(str("." + item + " " + tag))
+
+    doc_classes = list(set(doc_classes))
+    doc_tags = list(set(doc_tags))
+    doc_classtags = list(set(doc_classtags))
+
+    # Write tags, classes, and their existing combinations into the css file
+    with open (filename, "w") as myfile:                
+        myfile.write("")
+        for item in doc_tags: myfile.write(item + " {\n  \n  \n}\n")
+        for item in doc_classes: myfile.write(item + " {\n  \n  \n}\n")
+        for item in doc_classtags: myfile.write(item + " {\n  \n  \n}\n")
+            
+        myfile.close()    
+        
+####################################################################################################
+
 def dict_to_simplehtmlreport (input_dict, filename):
     """
     Objective: open a dictionary and write it to a .html file
@@ -124,6 +176,7 @@ def dict_to_simplehtmlreport (input_dict, filename):
     print("Creating file {0}...".format(filename))
     # Open (or create) file
     with open (filename, "w") as myfile:                
+        myfile.write(HEAD.replace("styles.css", filename.replace(".html", ".css")))
         myfile.write("<body>")
         
         for level1 in input_dict: # Dictionary with a list as entry
@@ -144,7 +197,9 @@ def dict_to_simplehtmlreport (input_dict, filename):
             myfile.write("<p></p>")
         
         myfile.write("</body>")
-        myfile.close()    
+        myfile.close()
+        
+        htmldict_to_css (input_dict, filename)
     return None
 
 ####################################################################################################
@@ -161,6 +216,7 @@ def dict_to_simplehtmlabridged (input_dict, filename):
     tr_dict = structures.dictlist_to_dictdict(input_dict, "pos_index")
     
     with open (filename, "w") as myfile:                
+        myfile.write(HEAD.replace("styles.css", filename.replace(".html", ".css")))
         myfile.write("<body>")
         
         for level1 in tr_dict: # Dictionary with a list as entry
@@ -184,6 +240,8 @@ def dict_to_simplehtmlabridged (input_dict, filename):
         
         myfile.write("</body>")
         myfile.close()    
+
+    htmldict_to_css (input_dict, filename)
     return None
 
 ####################################################################################################

@@ -390,6 +390,7 @@ ALICE = "alice.html"
 
 # filegenerator.py tests
 #test_filegenerator()
+#filegenerator.htmldict_to_css(HTMLDICT2, "output.html")
 
 # userinput.py tests
 #test_userinput()
@@ -401,3 +402,4 @@ ALICE = "alice.html"
 # structures.py tests
 #test_structures(HTMLDICT)
 #test_structures(HTMLDICT2)
+
