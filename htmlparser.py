@@ -40,11 +40,12 @@ def get_tag_names (html_string):
 
 ####################################################################################################
 
-def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
+def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes, file_index = 0):
     """
     Inputs: filename of an html file,
             tuple with tag(s) we want to retrieve,
-            tuple with class(es) we want to retrieve.
+            tuple with class(es) we want to retrieve,
+            file index of the file within a file list, if applicable.
     Objective: an html file is opened, converted to a string, the string is converted to a soup,
                 and a list of tags belonging to the sought tag AND class is returned.
     Output: list with extracted tags.
@@ -53,6 +54,7 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
     html_string = filegenerator.file_to_string(html_filename)
     soup = BeautifulSoup(html_string, "html.parser")
     output_snippets = []
+    all_tags = list(soup.find_all())
     
     if wanted_classes != ("",) and wanted_tags != ("",):
         for wanted_tag in wanted_tags:
@@ -67,6 +69,8 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
                     snippet["contents"] = str(item)
                     if item.get("href") is not None: snippet["href"] = str(item.get("href"))
                     else: snippet["href"] = None
+                    snippet["file_index"] = file_index
+                    snippet["pos_index"]  = all_tags.index(item)
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
 
@@ -87,7 +91,9 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
                 snippet["contents"] = str(item)
                 if item.get("href") is not None: snippet["href"] = str(item.get("href"))
                 else: snippet["href"] = None
-                
+                snippet["file_index"] = file_index
+                snippet["pos_index"]  = all_tags.index(item)
+                    
                 # No plans to fully use RMDB yet, various data types will be converted to text
                    
                 if snippet not in output_snippets: output_snippets.append(snippet)
@@ -108,6 +114,8 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
                     snippet["contents"] = str(item)
                     if item.get("href") is not None: snippet["href"] = str(item.get("href"))
                     else: snippet["href"] = None
+                    snippet["file_index"] = file_index
+                    snippet["pos_index"]  = all_tags.index(item)
                     
                     # No plans to fully use RMDB yet, various data types will be converted to text
 
@@ -121,11 +129,12 @@ def extract_tags_classes_exact(html_filename, wanted_tags, wanted_classes):
 
 ####################################################################################################
 
-def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes):
+def extract_tags_classes_approximate(html_filename, wanted_tags, wanted_classes, file_index = 0):
     """
     Inputs: filename of an html file,
             tuple with tag(s) we want to retrieve,
-            tuple with class(es) we want to retrieve.
+            tuple with class(es) we want to retrieve,
+            file index of the file within a file list, if applicable.
     Objective: an html file is opened, converted to a string, the string is converted to a soup,
                 and a list of tags belonging to the sought tag AND class is returned.
     Output: list with extracted tags.

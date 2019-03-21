@@ -123,6 +123,7 @@ def dict_to_simplehtml (input_dict, filename):
     print("Creating file {0}...".format(filename))
     # Open (or create) file
     with open (filename, "w") as myfile:                
+        myfile.write("<body>")
         
         for level1 in input_dict: # Dictionary with a list as entry
             myfile.write("<p>--------------------------------------------------</p>")
@@ -134,13 +135,17 @@ def dict_to_simplehtml (input_dict, filename):
                 #print("Level2", len(level2), type(level2))
                 #print(level2)
                 myfile.write("<p>----------</p>")
-                myfile.write("<p>Tag " + str(1 + input_dict[level1].index(level2)) + " </p>")
-                myfile.write("<ul><li>Tag : " + str(level2["tag"]) + "</li>") 
-                myfile.write("<li>Class : " + str(level2["class"]) + "</li></ul>")
+                myfile.write("<p>Tag {0}</p>".format(
+                                str( 1 + input_dict[level1].index(level2) )))
+                myfile.write("<ul><li>Tag : <strong>{0}</strong> with class(es) : <strong>{1}</strong></li>".format(
+                             str(level2["tag"]), str(level2["class"]) )) 
+                myfile.write("<li>Absolute position : {0} in file {1}.</li></ul>".
+                                format(str( 1 + level2["pos_index"]), str( 1 + level2["file_index"]) ))
                 myfile.write("<p></p>")
                 myfile.write(str(level2["contents"]))        
             myfile.write("<p></p>")
-
+        
+        myfile.write("</body>")
         myfile.close()    
     return None
 

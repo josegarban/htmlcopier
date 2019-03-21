@@ -82,14 +82,14 @@ SOURCETYPE_INPUTS = (#("file"    , "alice.html"),
                      #("website" , ""),
                      #("database", "")
                      )
-SEARCHTYPE_INPUTS = (#"Exact",
+SEARCHTYPE_INPUTS = ("Exact",
                      #"Approximate",
-                     "All",
+                     #"All",
                      #"List"
                      )
-TAG_INPUTS        = (("",),
+TAG_INPUTS        = (#("",),
                      #("title",),
-                     #("p",),
+                     ("p",),
                      #("a",),
                      #("title", "head")
                      )
@@ -98,10 +98,10 @@ CLASS__INPUTS     = (("",),
                      #("tory",),
                      #("story", "tory"),
                      )
-OUTPUTTYPE_INPUTS = (#(".html", "output"),
+OUTPUTTYPE_INPUTS = ((".html", "output"),
                      #(".pdf", "output"),
                      #("current.sqlite", "output.sqlite"),
-                     ("fresh.sqlite", "output"),
+                     #("fresh.sqlite", "output"),
                      )
 
 # Simulated user input through the generation of several dictionaries
@@ -305,7 +305,7 @@ def test_structures(input_dict):
 
 ## Test actual script
 #pprint.pprint(main.main(""))
-main.main("")
+#main.main("")
 
 # htmlparser.py tests
 ALICE = "alice.html"
@@ -315,7 +315,7 @@ ALICE = "alice.html"
 #test_extract_tags_classes_approximate(ALICE,"p","tory")
 
 # main.py tests
-#test_main()
+test_main()
 
 # filegenerator.py tests
 #test_filegenerator()
